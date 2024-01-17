@@ -1,35 +1,35 @@
 import React, { useCallback, useState, useRef } from 'react';
 
 import ReactFlow, {
-		 ReactFlowProvider,
-		 Controls,
-		 Background,
-		 MiniMap
+         ReactFlowProvider,
+         Controls,
+         Background,
+         MiniMap
 }
 from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { shallow } from 'zustand/shallow';
-import useStore		from './store/store';
+import useStore        from './store/store';
 
-import nodeTypes	 from './initialData/nodeTypes'; 
+import nodeTypes     from './initialData/nodeTypes'; 
 
 import Sidebar from './components/DnDSidebar';
 
 
 
-const selector = (state) => ({	nodes: state.nodes,
-	edges: state.edges,
-	onNodesChange: state.onNodesChange,
-	onEdgesChange: state.onEdgesChange,
-	onConnect: state.onConnect,
+const selector = (state) => ({    nodes: state.nodes,
+    edges: state.edges,
+    onNodesChange: state.onNodesChange,
+    onEdgesChange: state.onEdgesChange,
+    onConnect: state.onConnect,
     appendNode: state.appendNode,
 });
 
 
 function App() {
-	// const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow); // RFC: deprecated #1937
-	const reactFlowWrapper = useRef(null);
+    // const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow); // RFC: deprecated #1937
+    const reactFlowWrapper = useRef(null);
     const { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode } = useStore(selector);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
@@ -75,7 +75,7 @@ function App() {
 
 
 
-	return (
+    return (
         <div className='dndflow'>
             <ReactFlowProvider>
                 <div className="reactflow-wrapper" ref={reactFlowWrapper}>
@@ -107,7 +107,7 @@ function App() {
                 </div>
             </ReactFlowProvider>
         </div>
-	);
+    );
 }
 
 export default App;

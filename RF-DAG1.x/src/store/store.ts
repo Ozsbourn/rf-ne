@@ -3,18 +3,18 @@ import { createWithEqualityFn as create } from 'zustand/traditional';
 import { shallow }                        from 'zustand/shallow';
 
 import {
-	Connection,
-	Edge,
-	EdgeChange,
-	Node,
-	NodeChange,
+    Connection,
+    Edge,
+    EdgeChange,
+    Node,
+    NodeChange,
     addNodes,
-	addEdge,
-	OnNodesChange,
-	OnEdgesChange,
-	OnConnect,
-	applyNodeChanges,
-	applyEdgeChanges,
+    addEdge,
+    OnNodesChange,
+    OnEdgesChange,
+    OnConnect,
+    applyNodeChanges,
+    applyEdgeChanges,
 } from 'reactflow';
 
 import initialNodes from '../initialData/nodes';
@@ -26,12 +26,12 @@ type RFState = {
     currId: number;
     getId:  getId;
 
-	nodes:  Node[];
-	edges:  Edge[];
+    nodes:  Node[];
+    edges:  Edge[];
 
-	onNodesChange: OnNodesChange;
-	onEdgesChange: OnEdgesChange;
-	
+    onNodesChange: OnNodesChange;
+    onEdgesChange: OnEdgesChange;
+    
     onConnect: OnConnect;
 
     appendNode: appendNode;
@@ -44,26 +44,26 @@ const useStore = create<RFState>((set, get, shallow) => ({
         return `dndnode_${get().currId++}`;
     },
 
-	nodes: initialNodes,
-	edges: initialEdges,
+    nodes: initialNodes,
+    edges: initialEdges,
 
-	onNodesChange: (changes: NodeChange[]) => {
-    	set({
-    		nodes: applyNodeChanges(changes, get().nodes),
-    	});
-	},
+    onNodesChange: (changes: NodeChange[]) => {
+        set({
+            nodes: applyNodeChanges(changes, get().nodes),
+        });
+    },
 
-	onEdgesChange: (changes: EdgeChange[]) => {
-    	set({
-    		edges: applyEdgeChanges(changes, get().edges),
-    	});
-	},
+    onEdgesChange: (changes: EdgeChange[]) => {
+        set({
+            edges: applyEdgeChanges(changes, get().edges),
+        });
+    },
 
-	onConnect: (connection: Connection) => {
-    	set({
-    		edges: addEdge(connection, get().edges),
-    	});
-	},
+    onConnect: (connection: Connection) => {
+        set({
+            edges: addEdge(connection, get().edges),
+        });
+    },
 
     appendNode: (node: Node) => {
         node.id = get().getNewId();
