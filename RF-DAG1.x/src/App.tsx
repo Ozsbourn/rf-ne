@@ -60,6 +60,19 @@ function App() {
         appendNode(newNode);
     }, [reactFlowInstance],);
 
+    const saveToJSON = (event) => {
+        event.preventDefault();
+        const rfJsonInstance = reactFlowInstance!.toObject();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
+            type: 'text/plain'
+        }));
+        a.setAttribute('download', 'data.json');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
 
 
 	return (
@@ -85,7 +98,13 @@ function App() {
                         <MiniMap pannable zoomable/>
                     </ReactFlow>
                 </div>
-                <Sidebar />
+                <div className='controls-panel'>
+                    <Sidebar />
+
+                    <div className='dndnode input save-button' onClick={saveToJSON}>
+                        Save to JSON
+                    </div>
+                </div>
             </ReactFlowProvider>
         </div>
 	);

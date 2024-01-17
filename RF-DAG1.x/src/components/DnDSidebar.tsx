@@ -12,7 +12,7 @@ export default () => {
 	return (
 		<aside>
 			<div>
-				<div className='asside-description'>
+				<div className='aside-description'>
 					Drag&Drop these nodes at a schema:
 				</div>
 
@@ -26,7 +26,7 @@ export default () => {
 
 				<div className='dndnode output' onDragStart={(event) => onDragStart(event, 'output')} draggable>
 					Output node
-				</div>				
+				</div>		
 			</div>
 		</aside>
 	);
