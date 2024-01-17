@@ -62,6 +62,11 @@ const Wrapper = observer(({ store }) => {
         document.body.removeChild(a);
     }
 
+    const gunc = (event) => {
+        event.target.value;
+
+    }
+
 
 
     return (

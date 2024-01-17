@@ -32,9 +32,9 @@ type RFState = {
     onNodesChange: OnNodesChange;
     onEdgesChange: OnEdgesChange;
     
-    onConnect: OnConnect;
-
-    appendNode: appendNode;
+    onConnect:         OnConnect;
+    appendNode:        appendNode;
+    onNodeDoubleClick: OnNodeDoubleClick;
 };
 
 
@@ -70,6 +70,11 @@ const useStore = create<RFState>((set, get, shallow) => ({
         set({
             nodes: get().nodes.concat(node),
         });
+    },
+
+    onNodeDoubleClick: (event: React.MouseEvent, node: Node) => {
+        console.log('dbl');
+        // Here should be logic for customize of a node  
     }
 }));
 

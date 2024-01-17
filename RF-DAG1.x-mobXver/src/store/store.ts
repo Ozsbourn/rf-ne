@@ -1,4 +1,5 @@
-import { observable, 
+import { makeObservable,
+		 observable, 
 		 computed, 
 		 action } from 'mobx';
 import {
@@ -22,13 +23,14 @@ import initialEdges from '../initialData/edges';
 
 
 export class SchemeStore {
-	// @observable 
 	currId: number = 0;
 
 	@observable nodes: Node[];
 	@observable edges: Edge[];
 
 	constructor(nodes: Node[], edges: Edge[]) {
+		makeObservable(this);
+
 		this.nodes = nodes;
 		this.edges = edges;
 	}
@@ -44,6 +46,7 @@ export class SchemeStore {
 	@action
 	onNodesChange = (changes: NodeChange[]) => {
 		this.nodes = applyNodeChanges(changes, this.nodes);
+		console.log(this.nodes);
 	}
 
 	@action
@@ -56,9 +59,12 @@ export class SchemeStore {
 		this.edges = addEdge(connection, this.edges);
 	}
 
-	@computed
+	@action
 	appendNode = (node: Node) => {
-        node.id = this.getNewId();
-        this.nodes.concat(node);
+        this.nodes = [...this.nodes, { 
+        		...node,
+        		id: this.getNewId()
+        	}
+        ]
     }
 }

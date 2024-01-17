@@ -1,36 +1,39 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { 
+       useCallback, 
+       useState, 
+       useRef 
+} from 'react';
 
 import ReactFlow, {
-         ReactFlowProvider,
-         Controls,
-         Background,
-         MiniMap
-}
-from 'reactflow';
+       ReactFlowProvider,
+       Controls,
+       Background,
+       MiniMap
+} from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import { shallow } from 'zustand/shallow';
-import useStore        from './store/store';
+import useStore    from './store/store';
 
-import nodeTypes     from './initialData/nodeTypes'; 
-
+import nodeTypes   from './initialData/nodeTypes'; 
 import Sidebar from './components/DnDSidebar';
 
 
 
-const selector = (state) => ({    nodes: state.nodes,
-    edges: state.edges,
-    onNodesChange: state.onNodesChange,
-    onEdgesChange: state.onEdgesChange,
-    onConnect: state.onConnect,
-    appendNode: state.appendNode,
-});
+// const selector = (state) => ({    
+//     nodes: state.nodes,
+//     edges: state.edges,
+//     onNodesChange: state.onNodesChange,
+//     onEdgesChange: state.onEdgesChange,
+//     onConnect: state.onConnect,
+//     appendNode: state.appendNode,
+//     onNodeDoubleClick: state.onNodeDoubleClick,
+// });
 
 
 function App() {
     // const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow); // RFC: deprecated #1937
     const reactFlowWrapper = useRef(null);
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode } = useStore(selector);
+    const {state: { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode, onNodeDoubleClick }} = useStore();
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const onDragOver = useCallback((event) => {
@@ -86,6 +89,8 @@ function App() {
                         onEdgesChange={onEdgesChange}
                         onConnect={onConnect}
                         nodeTypes={nodeTypes}
+
+                        onNodeDoubleClick={onNodeDoubleClick}
 
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
