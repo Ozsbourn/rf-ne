@@ -27,7 +27,7 @@ export default [
         label: 'CustomNode',
     },
     position: {
-        x: 350,
+        x: 150,
         y: 350
     }
   }

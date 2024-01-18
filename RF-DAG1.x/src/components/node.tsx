@@ -1,38 +1,132 @@
 import { memo,
-         useState, 
-         useCallback } from 'react';
+         useState } from 'react';
 import { Handle, 
-         Position, 
          NodeToolbar,
          NodeResizer } from 'reactflow';
 
-import Copy   from '../assets/copy.svg';
-import Expand from '../assets/expand-arrows.svg';
-import Close  from '../assets/cross.svg';
+// import Copy   from '../assets/copy.svg';
+// import Expand from '../assets/expand-arrows.svg';
+// import Close  from '../assets/cross.svg';
+
+import useStore         from '../store/store';
+
+import { Modal }        from 'antd';
+import Label            from './Label';
 
 
 
-const CustomNode = ({ data, selected }) => {
+const CustomNode = ({ id, data, selected }) => {
+    const { 
+        getHandlers, 
+        onNodeLabelChange, 
+        deleteNode,
+    } = useStore();
+
+    const [label, setLabel]             = useState(data.label);
+    const [isShowInput, setIsShowInput] = useState(false); 
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    // Utils
+    let currId = 0;
+    const getNewId = () => {
+        return `handle_id_${currId++}`;
+    }
+
+    const handleCopy   = () => {
+        {/* TODO: here should be node copy logic */}
+        {/*
+          * possible way:
+          *     get node w/o edges(?), w/ handles tho
+          *     serialize it to json string 
+          *     set it to navigator.clipboard
+          *     deserialize and add node with same properties, gen new Id tho
+          *     
+          */}
+    };
+    const handleEdit   = () => {
+        // setNodeEditId(id);
+        showModal();
+    };
+    const handleDelete = () => {
+        deleteNode(id);
+    };
+
+
+    // Handlers for Modal
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+
+
     return (
         <div className='customNode'>
-            <NodeResizer color="#ff0071" isVisible={selected} minWidth={100} minHeight={30} />
+            <NodeResizer 
+                color='#ff0071' 
+                isVisible={selected} 
+                minWidth={100} 
+                minHeight={30}
+            />
 
             <NodeToolbar 
                 className='controlsNodePanel' 
-                visible={data.toolbarVisible}
+                isVisible={data.toolbarVisible}
                 position={data.toolbarPosition}
             >
-                <button>delete</button>
-                <button>copy</button>
-                <button>expand</button>
+                <button onClick={handleCopy}>Copy</button>
+                <button onClick={handleEdit}>Edit</button>
+                <button onClick={handleDelete}>Delete</button>
             </NodeToolbar>
 
-            <div style={{ padding: '10px 20px' }}>
-                {data.label}
+            <div 
+                className='label' 
+                style={{ padding: '10px 20px' }}
+            >
+                <Label 
+                    value={label}
+                    handleChange={(e: { target: { value: string; }; }) => {
+                        setLabel(e.target.value);
+                        onNodeLabelChange(e.target.value, id);
+                    }}
+                    handleDoubleClick={() => setIsShowInput(true)}
+                    handleBlur={() => setIsShowInput(false)}
+                    isShowInput={isShowInput}
+                />
             </div>
 
-            <Handle type="target" position={Position.Left}  />
-             <Handle type="source" position={Position.Right} />
+            {
+                getHandlers(id).map((e) => (
+                    <Handle 
+                        id={getNewId()}
+                        key={currId - 1}
+                        type={e.type} 
+                        position={e.position}
+                    />
+                ))
+            }
+
+            <Modal
+                title='Edit Node Window'
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <span>Label:</span>
+                <input 
+                    value={label}
+                    onChange={(e) => {
+                        setLabel(e.target.value);
+                        onNodeLabelChange(e.target.value, id);
+                    }}
+                />
+            </Modal>
         </div>
     );
 }

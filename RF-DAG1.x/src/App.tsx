@@ -1,21 +1,22 @@
-import React, { 
+import { 
        useCallback, 
        useState, 
        useRef 
 } from 'react';
-
 import ReactFlow, {
        ReactFlowProvider,
        Controls,
        Background,
-       MiniMap
+       BackgroundVariant,
+       // MiniMap,
+       // ProOptions
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import useStore    from './store/store';
+import useStore  from './store/store';
 
-import nodeTypes   from './initialData/nodeTypes'; 
-import Sidebar from './components/DnDSidebar';
+import nodeTypes from './initialData/nodeTypes'; 
+import Sidebar   from './components/DnDSidebar';
 
 
 
@@ -26,21 +27,21 @@ import Sidebar from './components/DnDSidebar';
 //     onEdgesChange: state.onEdgesChange,
 //     onConnect: state.onConnect,
 //     appendNode: state.appendNode,
-//     onNodeDoubleClick: state.onNodeDoubleClick,
 // });
 
 
 function App() {
     // const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow); // RFC: deprecated #1937
     const reactFlowWrapper = useRef(null);
-    const {state: { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode, onNodeDoubleClick }} = useStore();
+    // const {state: { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode }} = useStore();
+    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode, getAllHandles } = useStore();
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-    const onDragOver = useCallback((event) => {
+    const onDragOver = useCallback((event: { preventDefault: () => void; dataTransfer: { dropEffect: string; }; }) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
-    const onDrop = useCallback((event) => {
+    const onDrop = useCallback((event: { preventDefault: () => void; dataTransfer: { getData: (arg0: string) => any; }; clientX: any; clientY: any; }) => {
         event.preventDefault();
 
         const type = event.dataTransfer.getData('application/reactflow');
@@ -63,9 +64,14 @@ function App() {
         appendNode(newNode);
     }, [reactFlowInstance],);
 
-    const saveToJSON = (event) => {
+    const saveToJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const rfJsonInstance = reactFlowInstance!.toObject();
+        
+        const handles = getAllHandles();
+        const rfJsonInstance = {
+            ...reactFlowInstance!.toObject(), 
+            handles
+        };
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
             type: 'text/plain'
@@ -74,6 +80,10 @@ function App() {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+    }
+
+    const openJSON = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
     }
 
 
@@ -90,17 +100,19 @@ function App() {
                         onConnect={onConnect}
                         nodeTypes={nodeTypes}
 
-                        onNodeDoubleClick={onNodeDoubleClick}
-
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
                         onDragOver={onDragOver}
 
                         fitView
+                        deleteKeyCode={'Delete'}
+                        selectionKeyCode={'Ctrl'}
+
+                        // proOptions={{hideAttribution: true}}
                     >
-                        <Background variant="dots" gap={12} size={1} />
+                        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        <MiniMap pannable zoomable/>
+                        {/*<MiniMap pannable zoomable/>*/}
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>
@@ -108,6 +120,9 @@ function App() {
 
                     <div className='dndnode input save-button' onClick={saveToJSON}>
                         Save to JSON
+                    </div>
+                    <div className='dndnode input save-button' onClick={openJSON}>
+                        Open JSON
                     </div>
                 </div>
             </ReactFlowProvider>
