@@ -2,7 +2,7 @@ import { memo,
          useState } from 'react';
 import { Handle, 
          NodeToolbar,
-         NodeResizer } from 'reactflow';
+         NodeResizer, } from 'reactflow';
 
 // import Copy   from '../assets/copy.svg';
 // import Expand from '../assets/expand-arrows.svg';
@@ -10,7 +10,7 @@ import { Handle,
 
 import useStore         from '../store/store';
 
-import { Modal }        from 'antd';
+import { Modal } from 'antd';
 import Label            from './Label';
 
 
@@ -26,7 +26,7 @@ const CustomNode = ({ id, data, selected }) => {
     const [isShowInput, setIsShowInput] = useState(false); 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     // Utils
     let currId = 0;
     const getNewId = () => {
@@ -40,7 +40,7 @@ const CustomNode = ({ id, data, selected }) => {
           *     get node w/o edges(?), w/ handles tho
           *     serialize it to json string 
           *     set it to navigator.clipboard
-          *     deserialize and add node with same properties, gen new Id tho
+          *     and to paste - deserialize and add node with same properties, gen new Id tho
           *     
           */}
     };
@@ -104,14 +104,15 @@ const CustomNode = ({ id, data, selected }) => {
             {
                 getHandlers(id).map((e) => (
                     <Handle 
-                        id={getNewId()}
-                        key={currId - 1}
+                        id={e.id}
+                        key={e.id}
                         type={e.type} 
                         position={e.position}
                     />
                 ))
             }
-
+            
+            {/* Should be separated component: from here */}
             <Modal
                 title='Edit Node Window'
                 open={isModalOpen}
@@ -127,6 +128,7 @@ const CustomNode = ({ id, data, selected }) => {
                     }}
                 />
             </Modal>
+            {/* to here w/o links between that component and anything in modal*/}
         </div>
     );
 }

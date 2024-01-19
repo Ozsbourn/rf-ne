@@ -8,8 +8,9 @@ import ReactFlow, {
        Controls,
        Background,
        BackgroundVariant,
-       // MiniMap,
-       // ProOptions
+       XYPosition,
+       MiniMap,
+       ConnectionMode,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -17,24 +18,24 @@ import useStore  from './store/store';
 
 import nodeTypes from './initialData/nodeTypes'; 
 import Sidebar   from './components/DnDSidebar';
+import { createNodeConfigPattern } from './store/nodeConfigFactory';
+import { CustomNodeConfig } from './nodeConfig';
 
-
-
-// const selector = (state) => ({    
-//     nodes: state.nodes,
-//     edges: state.edges,
-//     onNodesChange: state.onNodesChange,
-//     onEdgesChange: state.onEdgesChange,
-//     onConnect: state.onConnect,
-//     appendNode: state.appendNode,
-// });
 
 
 function App() {
-    // const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow); // RFC: deprecated #1937
     const reactFlowWrapper = useRef(null);
-    // const {state: { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode }} = useStore();
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, appendNode, getAllHandles } = useStore();
+    const { nodes, 
+            edges, 
+            onNodesChange, 
+            onEdgesChange, 
+            onConnect, 
+            appendNode, 
+            getAllHandles, 
+            getNewId,
+            appendHandlers,
+            getNewHandleId,
+            deleteNode } = useStore();
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const onDragOver = useCallback((event: { preventDefault: () => void; dataTransfer: { dropEffect: string; }; }) => {
@@ -49,18 +50,26 @@ function App() {
             return;
         }
 
-        const position = reactFlowInstance!.screenToFlowPosition({
-            x: event.clientX,
-            y: event.clientY,
+        // Should be dynamicaly, so need to store width and height of custom nodes 
+        //      like mutable constants somewhere, cuz get it from css isn't good way
+        //      -- Now straight offset for testing tho
+        const position: XYPosition = reactFlowInstance!.screenToFlowPosition({
+            x: event.clientX - 115,
+            y: event.clientY - 30,
         });
+        const id = getNewId();
         const newNode = {
-            type,
-            position,
+            id:   id,
+            type: (type === 'custom') ? 'myNode' : type,
+            position: position,
             data: {
                 label: `${type} node`,
             }
         }
 
+        let IdsArr = [getNewHandleId(), getNewHandleId(), getNewHandleId(), getNewHandleId()];
+        const tmp: CustomNodeConfig = createNodeConfigPattern(id, IdsArr);
+        appendHandlers(tmp);
         appendNode(newNode);
     }, [reactFlowInstance],);
 
@@ -86,6 +95,12 @@ function App() {
         event.preventDefault();
     }
 
+    const onDeleteNodeList = (nodes: Node[]) => {
+        nodes.map((node) => {
+            deleteNode(node.id);
+        });
+    }
+
 
 
     return (
@@ -96,6 +111,7 @@ function App() {
                         nodes={nodes}
                         edges={edges}
                         onNodesChange={onNodesChange}
+                        onNodesDelete={onDeleteNodeList}
                         onEdgesChange={onEdgesChange}
                         onConnect={onConnect}
                         nodeTypes={nodeTypes}
@@ -104,15 +120,22 @@ function App() {
                         onDrop={onDrop}
                         onDragOver={onDragOver}
 
+                        connectionMode={ConnectionMode.Loose}
+
                         fitView
                         deleteKeyCode={'Delete'}
                         selectionKeyCode={'Ctrl'}
 
-                        // proOptions={{hideAttribution: true}}
+                        proOptions={{hideAttribution: true}}
                     >
                         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        {/*<MiniMap pannable zoomable/>*/}
+                        <MiniMap 
+                            style={{border: "1px solid #000000"}}
+                            nodeColor={'#cd0ffe'}
+                            pannable 
+                            zoomable
+                        />
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>

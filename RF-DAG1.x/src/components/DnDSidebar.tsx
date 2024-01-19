@@ -26,6 +26,10 @@ export default () => {
 
                 <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'output')} draggable>
                     Output node
+                </div>  
+
+                <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'custom')} draggable>
+                    Custom node
                 </div>        
             </div>
         </aside>

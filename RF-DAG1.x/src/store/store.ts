@@ -1,6 +1,4 @@
-// import { create } from 'zustand'; // RFC: deprecate #1937
 import { createWithEqualityFn as create } from 'zustand/traditional';
-// import { shallow }                        from 'zustand/shallow';
 
 import {
     Connection,
@@ -23,27 +21,27 @@ import initialEdges from '../initialData/edges';
 
 type RFState = {
     currId:   number;
-    getNewId: () => void;
+    getNewId: () => string;
 
     nodes:  Node[];
     edges:  Edge[];
 
-    handlers: CustomNodeConfig[];
+    currHandleId:   number;
+    getNewHandleId: () => string;
+    handlers:       CustomNodeConfig[];
 
-    // Get and Id of node that should be edited to pass it into Sheet component 
-    // currEditable:  string;
-    // setNodeEditId: (id: string) => void;
-
-    onNodesChange:     (changes: NodeChange[]) => void;
+    onNodesChange:     (changes: NodeChange[])       => void;
     onNodeLabelChange: (changes: string, id: string) => void;
-    deleteNode:        (id: string) => void;
-    onEdgesChange:     (changes: EdgeChange[]) => void;
+    deleteNode:        (id: string)                  => void;
+    onEdgesChange:     (changes: EdgeChange[])       => void;
     
-    onConnect:     (connection: Connection) => void;
-    appendNode:    (node: Node) => void;
+    onConnect:         (connection: Connection)      => void;
+    appendNode:        (node: Node)                  => void;
 
-    getHandlers:   (id: string) => HandleConfig[];
-    getAllHandles: () => CustomNodeConfig[];
+    getHandlers:       (id: string) => HandleConfig[];
+    getAllHandles:     ()           => CustomNodeConfig[];
+
+    appendHandlers:    (handleConfig: CustomNodeConfig) => void;
 };
 
 
@@ -56,35 +54,35 @@ const useStore = create<RFState>((set, get, _shallow) => ({
     nodes: initialNodes,
     edges: initialEdges,
 
+    currHandleId: 0,
+    getNewHandleId: () => {
+        return `handleId_${get().currHandleId++}`;
+    },
     handlers: [{
         id: '4',
         handlers: [
             {
+                id: 'handle_1',
                 type: 'target',
                 position: Position.Left,
             },
             {
+                id: 'handle_2',
                 type: 'source',
                 position: Position.Right,
             },
             {
+                id: 'handle_3',
                 type: 'target',
                 position: Position.Top,
             },
             {
+                id: 'handle_4',
                 type: 'source',
                 position: Position.Bottom,
             },
         ]
     }],
-
-    // currEditable: '',
-
-    // setNodeEditId: (id: string) => {
-    //     set({
-    //         currEditable: id,
-    //     });
-    // },
 
     onNodesChange: (changes: NodeChange[]) => {
         set({
@@ -107,9 +105,17 @@ const useStore = create<RFState>((set, get, _shallow) => ({
         });
     },
 
+    /*
+     * Right order:
+     *      1. delete any edges, where there is id deleted node as src or target
+     *      2. delete handles w/ this id
+     *      3. delete node w/ this id
+     */
     deleteNode: (id: string) => {
         set({
-            nodes: get().nodes.filter(node => node.id !== id),
+            edges:    get().edges.filter(edge => (edge.source !== id || edge.target !== id)),
+            handlers: get().handlers.filter(handle => handle.id !== id),
+            nodes:    get().nodes.filter(node => node.id !== id),
         });
     },
 
@@ -126,19 +132,30 @@ const useStore = create<RFState>((set, get, _shallow) => ({
     },
 
     appendNode: (node: Node) => {
-        node.id = get().getNewId();
         set({
             nodes: get().nodes.concat(node),
         });
     },
 
     getHandlers: (id: string) => {
-        return get().handlers.filter((handler) => handler.id === id)[0].handlers;
+        const handles = get().handlers.filter((handler) => handler.id === id);
+
+        if (handles.length == 0) {
+            return [];
+        }
+
+        return handles[0].handlers;
     },
 
     getAllHandles: () => {
         return get().handlers;
-    } 
+    },
+
+    appendHandlers: (handleConfig: CustomNodeConfig) => {
+        set({
+            handlers: get().handlers.concat(handleConfig),
+        });
+    }
 }));
 
 export default useStore;
