@@ -1,4 +1,5 @@
 import React from 'react';
+import Label from './Label';
 
 
 
@@ -31,6 +32,9 @@ export default () => {
                 <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'custom')} draggable>
                     Custom node
                 </div>        
+            </div>
+
+            <div className='nodeEditFields'>
             </div>
         </aside>
     );

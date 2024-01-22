@@ -16,10 +16,10 @@ import 'reactflow/dist/style.css';
 
 import useStore  from './store/store';
 
-import nodeTypes from './initialData/nodeTypes'; 
-import Sidebar   from './components/DnDSidebar';
+import Sidebar       from './components/Sidebar';
+import { nodeTypes } from './initialData/nodeTypes'; 
+import { CustomNodeConfig }        from './nodeConfig';
 import { createNodeConfigPattern } from './store/nodeConfigFactory';
-import { CustomNodeConfig } from './nodeConfig';
 
 
 

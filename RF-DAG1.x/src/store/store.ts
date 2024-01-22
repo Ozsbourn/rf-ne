@@ -81,6 +81,11 @@ const useStore = create<RFState>((set, get, _shallow) => ({
                 type: 'source',
                 position: Position.Bottom,
             },
+            {
+                id: 'handle_5',
+                type: 'source',
+                position: Position.Bottom,
+            },
         ]
     }],
 

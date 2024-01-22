@@ -2,6 +2,6 @@ import CustomNode from '../components/node';
 
 
 
-export default {
+export const nodeTypes = {
     myNode: CustomNode,
 }
