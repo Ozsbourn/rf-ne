@@ -1,7 +1,7 @@
 import { 
        useCallback, 
        useState, 
-       useRef 
+       useRef, 
 } from 'react';
 import ReactFlow, {
        ReactFlowProvider,
@@ -20,6 +20,7 @@ import Sidebar       from './components/Sidebar';
 import { nodeTypes } from './initialData/nodeTypes'; 
 import { CustomNodeConfig }        from './nodeConfig';
 import { createNodeConfigPattern } from './store/nodeConfigFactory';
+// import SocketManager from './sockManager/sockManager';
 
 
 
@@ -130,12 +131,12 @@ function App() {
                     >
                         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        <MiniMap 
+                        {/*<MiniMap 
                             style={{border: "1px solid #000000"}}
                             nodeColor={'#cd0ffe'}
                             pannable 
                             zoomable
-                        />
+                        />*/}
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>

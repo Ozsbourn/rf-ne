@@ -16,6 +16,7 @@ import { HandleConfig, CustomNodeConfig } from '../nodeConfig';
 
 import initialNodes from '../initialData/nodes';
 import initialEdges from '../initialData/edges';
+import socketManager from '../sockManager/sockManager';
 
 
 
@@ -30,18 +31,22 @@ type RFState = {
     getNewHandleId: () => string;
     handlers:       CustomNodeConfig[];
 
-    onNodesChange:     (changes: NodeChange[])       => void;
-    onNodeLabelChange: (changes: string, id: string) => void;
-    deleteNode:        (id: string)                  => void;
-    onEdgesChange:     (changes: EdgeChange[])       => void;
+    onNodesChange:           (changes: NodeChange[])       => void;
+    onNodesChangeByEmit:     (changes: NodeChange[])       => void;
+    onNodeLabelChange:       (changes: string, id: string) => void;
+    onNodeLabelChangeByEmit: (changes: string, id: string) => void;
+    deleteNode:              (id: string)                  => void;
+    onEdgesChange:           (changes: EdgeChange[])       => void;
+    onEdgesChangeByEmit:     (changes: EdgeChange[])       => void;
     
-    onConnect:         (connection: Connection)      => void;
-    appendNode:        (node: Node)                  => void;
+    onConnect:               (connection: Connection)      => void;
+    appendNode:              (node: Node)                  => void;
 
-    getHandlers:       (id: string) => HandleConfig[];
-    getAllHandles:     ()           => CustomNodeConfig[];
-
-    appendHandlers:    (handleConfig: CustomNodeConfig) => void;
+    getHandlersCount:        (id: string) => number;
+    getHandlers:             (id: string) => HandleConfig[];
+    getAllHandles:           ()           => CustomNodeConfig[];
+   
+    appendHandlers:          (handleConfig: CustomNodeConfig) => void;
 };
 
 
@@ -93,9 +98,33 @@ const useStore = create<RFState>((set, get, _shallow) => ({
         set({
             nodes: applyNodeChanges(changes, get().nodes),
         });
+        //** ToDo: set socketId in the store
+        socketManager.sendNodeChanges(socketManager.getSocketId(), changes);
+    },
+
+    onNodesChangeByEmit: (changes: NodeChange[]) => {
+        set({
+            nodes: applyNodeChanges(changes, get().nodes),
+        });
     },
 
     onNodeLabelChange: (changes: string, id: string) => {
+        set({
+            nodes: get().nodes.map(node => (
+                (node.id === id) ? ({
+                    ...node,
+                    data: {
+                        label: changes
+                    }
+                }) : (
+                    node
+                )
+            )),
+        });
+        socketManager.sendLabelChange(socketManager.getSocketId(), changes, id);
+    },
+
+    onNodeLabelChangeByEmit: (changes: string, id: string) => {
         set({
             nodes: get().nodes.map(node => (
                 (node.id === id) ? ({
@@ -128,6 +157,14 @@ const useStore = create<RFState>((set, get, _shallow) => ({
         set({
             edges: applyEdgeChanges(changes, get().edges),
         });
+        //** ToDo: set socketId in the store
+        socketManager.sendEdgeChanges(socketManager.getSocketId(), changes);
+    },
+
+    onEdgesChangeByEmit: (changes: EdgeChange[]) => {
+        set({
+            edges: applyEdgeChanges(changes, get().edges),
+        });
     },
 
     onConnect: (connection: Connection) => {
@@ -140,6 +177,16 @@ const useStore = create<RFState>((set, get, _shallow) => ({
         set({
             nodes: get().nodes.concat(node),
         });
+    },
+
+    getHandlersCount:  (id: string) => {
+        const handles = get().handlers.filter((handler) => handler.id === id);
+
+        if (handles.length == 0) {
+            return 0;
+        }
+
+        return handles[0].handlers.length;
     },
 
     getHandlers: (id: string) => {

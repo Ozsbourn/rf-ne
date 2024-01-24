@@ -1,4 +1,6 @@
 import { memo,
+         useEffect,
+         useRef,
          useState } from 'react';
 import { Handle, 
          NodeToolbar,
@@ -10,12 +12,13 @@ import { Handle,
 
 import useStore         from '../store/store';
 
-import { Modal } from 'antd';
+// import { Modal } from 'antd';
 import Label            from './Label';
 
 
 
 const CustomNode = ({ id, data, selected }) => {
+    const ref = useRef(null);
     const { 
         getHandlers, 
         onNodeLabelChange, 
@@ -25,13 +28,11 @@ const CustomNode = ({ id, data, selected }) => {
     const [label, setLabel]             = useState(data.label);
     const [isShowInput, setIsShowInput] = useState(false); 
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [nodeHeight, setNodeHeight] = useState();
+    // const [nodeWidth,   setNodeWidth] = useState();
 
-    // Utils
-    let currId = 0;
-    const getNewId = () => {
-        return `handle_id_${currId++}`;
-    }
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     const handleCopy   = () => {
         {/* TODO: here should be node copy logic */}
@@ -46,7 +47,7 @@ const CustomNode = ({ id, data, selected }) => {
     };
     const handleEdit   = () => {
         // setNodeEditId(id);
-        showModal();
+        // showModal();
     };
     const handleDelete = () => {
         deleteNode(id);
@@ -54,20 +55,25 @@ const CustomNode = ({ id, data, selected }) => {
 
 
     // Handlers for Modal
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+    // const showModal = () => {
+    //     setIsModalOpen(true);
+    // };
+    // const handleOk = () => {
+    //     setIsModalOpen(false);
+    // };
+    // const handleCancel = () => {
+    //     setIsModalOpen(false);
+    // };
+
+    useEffect(() => {
+        // setNodeWidth(ref.current.offsetWidth);
+        // setNodeHeight(ref.current.offsetHeight);
+    }, []);
 
 
 
     return (
-        <div className='customNode'>
+        <div className='customNode' ref={ref}>
             <NodeResizer 
                 color='#ff0071' 
                 isVisible={selected} 
@@ -113,7 +119,7 @@ const CustomNode = ({ id, data, selected }) => {
             }
             
             {/* Should be separated component: from here */}
-            <Modal
+            {/*<Modal
                 title='Edit Node Window'
                 open={isModalOpen}
                 onOk={handleOk}
@@ -127,7 +133,7 @@ const CustomNode = ({ id, data, selected }) => {
                         onNodeLabelChange(e.target.value, id);
                     }}
                 />
-            </Modal>
+            </Modal>*/}
             {/* to here w/o links between that component and anything in modal*/}
         </div>
     );

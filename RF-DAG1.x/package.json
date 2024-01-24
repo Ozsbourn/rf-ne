@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@uiw/react-codemirror": "^4.21.21",
     "antd": "^5.13.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reactflow": "^11.10.1",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4",
     "zukeeper": "^1.0.2",
     "zustand": "^4.4.7"
   },
