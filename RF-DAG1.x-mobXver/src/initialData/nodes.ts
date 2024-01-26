@@ -20,15 +20,4 @@ export default [
     data: { label: 'Output' },
     position: { x: 250, y: 250 },
   },
-  {
-    id: '4',
-    type: 'myNode',
-    data: {
-        label: 'CustomNode',
-    },
-    position: {
-        x: 350,
-        y: 350
-    }
-  }
 ] as Node[];

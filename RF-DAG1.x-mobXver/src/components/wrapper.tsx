@@ -1,4 +1,4 @@
-import React, { 
+import { 
        useCallback, 
        useState, 
        useRef 
@@ -7,26 +7,31 @@ import ReactFlow, {
        ReactFlowProvider,
        Controls,
        Background,
-       MiniMap
+       MiniMap,
+       ConnectionMode,
+       BackgroundVariant,
+       XYPosition
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { observer } from 'mobx-react-lite';
 
-import nodeTypes    from '../initialData/nodeTypes'; 
-import Sidebar      from './DnDSidebar';
+import { nodeTypes } from '../initialData/nodeTypes'; 
+import { CustomNodeConfig }        from '../nodeConfig';
+import { createNodeConfigPattern } from '../store/nodeConfigFactory';
+import Sidebar       from './Sidebar';
 
 
 
-const Wrapper = observer(({ store }) => {
+const Wrapper = observer(( { store } ) => {
     const reactFlowWrapper = useRef(null);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-    const onDragOver = useCallback((event) => {
+    const onDragOver = useCallback((event: any) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
-    const onDrop = useCallback((event) => {
+    const onDrop = useCallback((event: any) => {
         event.preventDefault();
 
         const type = event.dataTransfer.getData('application/reactflow');
@@ -34,18 +39,25 @@ const Wrapper = observer(({ store }) => {
             return;
         }
 
-        const position = reactFlowInstance!.screenToFlowPosition({
+        const position: XYPosition = reactFlowInstance!.screenToFlowPosition({
             x: event.clientX,
             y: event.clientY,
         });
+        const id = store.getNewId();
         const newNode = {
-            type,
-            position,
+            id:   id,
+            type: (type === 'custom') ? 'BaseNode' : type,
+            position: position,
             data: {
                 label: `${type} node`,
             }
         }
 
+        let IdsArr = [store.getNewHandleId(), store.getNewHandleId(), store.getNewHandleId(), store.getNewHandleId()];
+        if (type === 'custom') {
+            const tmp: CustomNodeConfig = createNodeConfigPattern(id, IdsArr);
+            store.appendHandlers(tmp);   
+        }
         store.appendNode(newNode);
     }, [reactFlowInstance],);
 
@@ -61,6 +73,15 @@ const Wrapper = observer(({ store }) => {
         a.click();
         document.body.removeChild(a);
     }
+    const openJSON = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+    }
+
+    const onDeleteNodeList = (nodes: Node[]) => {
+        nodes.map((node) => {
+            store.deleteNode(node.id);
+        });
+    }
 
 
 
@@ -72,6 +93,7 @@ const Wrapper = observer(({ store }) => {
                         nodes={store.nodes}
                         edges={store.edges}
                         onNodesChange={store.onNodesChange}
+                        onNodesDelete={onDeleteNodeList}
                         onEdgesChange={store.onEdgesChange}
                         onConnect={store.onConnect}
                         nodeTypes={nodeTypes}
@@ -80,11 +102,22 @@ const Wrapper = observer(({ store }) => {
                         onDrop={onDrop}
                         onDragOver={onDragOver}
 
+                        connectionMode={ConnectionMode.Loose}
+
                         fitView
+                        deleteKeyCode={'Delete'}
+                        selectionKeyCode={'Ctrl'}
+
+                        proOptions={{hideAttribution: true}}
                     >
-                        <Background variant="dots" gap={12} size={1} />
+                        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        <MiniMap pannable zoomable/>
+                        <MiniMap 
+                            style={{border: "1px solid #000000"}}
+                            nodeColor={'#cd0ffe'}
+                            pannable 
+                            zoomable
+                        />
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>
@@ -92,6 +125,9 @@ const Wrapper = observer(({ store }) => {
 
                     <div className='dndnode input save-button' onClick={saveToJSON}>
                         Save to JSON
+                    </div>
+                    <div className='dndnode input save-button' onClick={openJSON}>
+                        Open JSON
                     </div>
                 </div>
             </ReactFlowProvider>
