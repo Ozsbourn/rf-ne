@@ -1,5 +1,5 @@
 const sockConfig = {
-	socketServerUrl: 'localhost:3002'
+    socketServerUrl: 'localhost:3002'
 };
 
 

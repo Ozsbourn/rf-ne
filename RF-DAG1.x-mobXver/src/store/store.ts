@@ -1,6 +1,6 @@
 import { makeObservable,
-		 observable, 
-		 action } from 'mobx';
+         observable, 
+         action } from 'mobx';
 import {
     Connection,
     Edge,
@@ -24,46 +24,46 @@ import { CustomNodeConfig } from '../nodeConfig';
 
 
 export class SchemeStore {
-	currId: number = 0;
+    currId: number = 0;
 
-	@observable nodes: Node[];
-	@observable edges: Edge[];
+    @observable nodes: Node[];
+    @observable edges: Edge[];
 
-	@observable currHandleId: number;
-	@observable handlers: CustomNodeConfig[];
+    @observable currHandleId: number;
+    @observable handlers: CustomNodeConfig[];
 
-	constructor(nodes: Node[], edges: Edge[]) {
-		makeObservable(this);
+    constructor(nodes: Node[], edges: Edge[]) {
+        makeObservable(this);
 
-		this.currId = 0;
+        this.currId = 0;
 
-		this.nodes = nodes;
-		this.edges = edges;
+        this.nodes = nodes;
+        this.edges = edges;
 
-		this.currHandleId = 0;
-		this.handlers     = [];
-	}
+        this.currHandleId = 0;
+        this.handlers     = [];
+    }
 
 
 
-	// Util for make Id for dnd node
-	getNewId = () => {
-		return `dndnode_${this.currId++}`;
-	}
+    // Util for make Id for dnd node
+    getNewId = () => {
+        return `dndnode_${this.currId++}`;
+    }
 
-	getNewHandleId = () => {
+    getNewHandleId = () => {
         return `handleId_${this.currHandleId++}`;
     }
 
 
-	@action
-	onNodesChange = (changes: NodeChange[]) => {
-		this.nodes = applyNodeChanges(changes, this.nodes);
-	}
+    @action
+    onNodesChange = (changes: NodeChange[]) => {
+        this.nodes = applyNodeChanges(changes, this.nodes);
+    }
 
-	@action
-	onNodeLabelChange = (changes: string, id: string) => {
-		this.nodes.map(node => (
+    @action
+    onNodeLabelChange = (changes: string, id: string) => {
+        this.nodes.map(node => (
             (node.id === id) ? ({
                 ...node,
                 data: {
@@ -75,21 +75,21 @@ export class SchemeStore {
         ));
     }
 
-	@action
-	onEdgesChange = (changes: EdgeChange[]) => {
-		this.edges = applyEdgeChanges(changes, this.edges);
-	} 
-	
-	@action
-	onConnect = (connection: Connection) => {
-		this.edges = addEdge(connection, this.edges);
-	}
+    @action
+    onEdgesChange = (changes: EdgeChange[]) => {
+        this.edges = applyEdgeChanges(changes, this.edges);
+    } 
+    
+    @action
+    onConnect = (connection: Connection) => {
+        this.edges = addEdge(connection, this.edges);
+    }
 
-	@action
-	appendNode = (node: Node) => {
+    @action
+    appendNode = (node: Node) => {
         this.nodes = [...this.nodes, { 
-        		...node
-        	}
+                ...node
+            }
         ]
     }
 
@@ -136,7 +136,7 @@ export class SchemeStore {
     @action
     appendHandlers = (handleConfig: CustomNodeConfig) => {
         this.handlers = [...this.handlers, {
-        	handleConfig	
+            handleConfig    
         }];
     }
 }

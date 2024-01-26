@@ -6,14 +6,14 @@ import socketManager from "./sockManager";
 
 
 export const eventsDefs = {
-	conn:  'connection',
+    conn:  'connection',
 
-	edgeChange: 'edgesChange',
+    edgeChange: 'edgesChange',
 
-	nodeChange:      'nodesChange',
-	nodeLabelChange: 'nodeLabelChange',
+    nodeChange:      'nodesChange',
+    nodeLabelChange: 'nodeLabelChange',
 
-	discon: 'disconnect',
+    discon: 'disconnect',
 };
 
 
@@ -25,9 +25,9 @@ export const eventsDefs = {
  * @param      {NodeChange[]}  changes      The changes of nodes
  */
 export const nodesChangeEvent = (sourcererId: string, changes: NodeChange[]) => {
-	if (socketManager.getSocketId() !== sourcererId) {
-		useStore.getState().onNodesChangeByEmit(changes);	
-	}
+    if (socketManager.getSocketId() !== sourcererId) {
+        useStore.getState().onNodesChangeByEmit(changes);    
+    }
 };
 
 /**
@@ -37,9 +37,9 @@ export const nodesChangeEvent = (sourcererId: string, changes: NodeChange[]) => 
  * @param      {EdgeChange[]}  changes      The changes of edges
  */
 export const edgesChangeEvent = (sourcererId: string, changes: EdgeChange[]) => {
-	if (socketManager.getSocketId() !== sourcererId) {
-		useStore.getState().onEdgesChangeByEmit(changes);
-	}
+    if (socketManager.getSocketId() !== sourcererId) {
+        useStore.getState().onEdgesChangeByEmit(changes);
+    }
 };
 
 
@@ -51,7 +51,7 @@ export const edgesChangeEvent = (sourcererId: string, changes: EdgeChange[]) => 
  * @param      {string}  nodeId       The node identifier that needed to update label
  */
 export const nodeLabelChange = (sourcererId: string, newLabel: string, nodeId: string) => {
-	if (socketManager.getSocketId() !== sourcererId) {
-		useStore.getState().onNodeLabelChangeByEmit(newLabel, nodeId);
-	}
+    if (socketManager.getSocketId() !== sourcererId) {
+        useStore.getState().onNodeLabelChangeByEmit(newLabel, nodeId);
+    }
 };

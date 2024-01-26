@@ -6,40 +6,40 @@ import { HandleConfig } from '../nodeConfig';
 
 
 type SideHandles = {
-	num:     number,
-	handles: HandleConfig[],
+    num:     number,
+    handles: HandleConfig[],
 };
 
 type HandlesBySides = {
-	left:   SideHandles,
-	top:    SideHandles,
-	right:  SideHandles,
-	bottom: SideHandles,
+    left:   SideHandles,
+    top:    SideHandles,
+    right:  SideHandles,
+    bottom: SideHandles,
 };
 
 
 
 const HandleHolder = (id: string, w: number, h: number) => {
-	const nodeId: string = id;
+    const nodeId: string = id;
 
-	const [width,   setWidth] = useState(w);
-	const [height, setHeight] = useState(h);
+    const [width,   setWidth] = useState(w);
+    const [height, setHeight] = useState(h);
 
-	const { getHandlersCount, getHandlers } = useStore();
-
-
-	const getHandlesBySides = (width: number, height: number) => {
-		
-	};
-
-	useEffect(() => {
-		const handles = getHandlers(nodeId);
-	}, [width, height]);
+    const { getHandlersCount, getHandlers } = useStore();
 
 
+    const getHandlesBySides = (width: number, height: number) => {
+        
+    };
 
-	return (
-		{
+    useEffect(() => {
+        const handles = getHandlers(nodeId);
+    }, [width, height]);
+
+
+
+    return (
+        {
             getHandlers(nodeId).map((e) => (
                 <Handle 
                     id={e.id}
@@ -49,7 +49,7 @@ const HandleHolder = (id: string, w: number, h: number) => {
                 />
             ))
         }
-	);
+    );
 };
 
 
