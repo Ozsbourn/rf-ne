@@ -9,14 +9,16 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
-    Position
 } from 'reactflow';
 
 import { HandleConfig, CustomNodeConfig } from '../nodeConfig';
 
-import initialNodes from '../initialData/nodes';
-import initialEdges from '../initialData/edges';
-import socketManager from '../sockManager/sockManager';
+import initialNodes  from '../initialData/nodes';
+import initialEdges  from '../initialData/edges';
+
+// import * as Y from 'yjs';
+// import yjs from "zustand-middleware-yjs";
+// import { WebrtcProvider } from 'y-webrtc';
 
 
 
@@ -31,25 +33,31 @@ type RFState = {
     getNewHandleId: () => string;
     handlers:       CustomNodeConfig[];
 
-    onNodesChange:           (changes: NodeChange[])       => void;
-    onNodesChangeByEmit:     (changes: NodeChange[])       => void;
-    onNodeLabelChange:       (changes: string, id: string) => void;
-    onNodeLabelChangeByEmit: (changes: string, id: string) => void;
-    deleteNode:              (id: string)                  => void;
-    onEdgesChange:           (changes: EdgeChange[])       => void;
-    onEdgesChangeByEmit:     (changes: EdgeChange[])       => void;
+    onNodesChange:     (changes: NodeChange[])       => void;
+    onNodeLabelChange: (changes: string, id: string) => void;
+    deleteNode:        (id: string)                  => void;
+    onEdgesChange:     (changes: EdgeChange[])       => void;
     
-    onConnect:               (connection: Connection)      => void;
-    appendNode:              (node: Node)                  => void;
+    onConnect:         (connection: Connection)      => void;
+    appendNode:        (node: Node)                  => void;
 
-    getHandlersCount:        (id: string) => number;
-    getHandlers:             (id: string) => HandleConfig[];
-    getAllHandles:           ()           => CustomNodeConfig[];
+    getHandlersCount:  (id: string) => number;
+    getHandlers:       (id: string) => HandleConfig[];
+    getAllHandles:     ()           => CustomNodeConfig[];
    
-    appendHandlers:          (handleConfig: CustomNodeConfig) => void;
+    appendHandlers:    (handleConfig: CustomNodeConfig) => void;
 };
 
+// const ydoc = new Y.Doc();
+// const provider = new WebrtcProvider('room-name', ydoc, { 
+//     signaling: ['ws://localhost:4444']
+// });
+// const wsProvider = new WebsocketProvider('ws://localhost:1234', 'my-roomname', ydoc);
+// wsProvider.on('status', (event: any) => {
+//   console.log(event.status) // logs "connected" or "disconnected"
+// });
 
+// const useStore = create<RFState>(yjs(ydoc, 'shared', (set: any, get: any, _shallow: any) => ({
 const useStore = create<RFState>((set, get, _shallow) => ({
     currId: 0,
     getNewId: () => {
@@ -63,68 +71,15 @@ const useStore = create<RFState>((set, get, _shallow) => ({
     getNewHandleId: () => {
         return `handleId_${get().currHandleId++}`;
     },
-    handlers: [{
-        id: '4',
-        handlers: [
-            {
-                id: 'handle_1',
-                type: 'target',
-                position: Position.Left,
-            },
-            {
-                id: 'handle_2',
-                type: 'source',
-                position: Position.Right,
-            },
-            {
-                id: 'handle_3',
-                type: 'target',
-                position: Position.Top,
-            },
-            {
-                id: 'handle_4',
-                type: 'source',
-                position: Position.Bottom,
-            },
-            {
-                id: 'handle_5',
-                type: 'source',
-                position: Position.Bottom,
-            },
-        ]
-    }],
+    handlers: [],
 
     onNodesChange: (changes: NodeChange[]) => {
-        set({
-            nodes: applyNodeChanges(changes, get().nodes),
-        });
-        //** ToDo: set socketId in the store
-        socketManager.sendNodeChanges(socketManager.getSocketId(), changes);
-    },
-
-    onNodesChangeByEmit: (changes: NodeChange[]) => {
         set({
             nodes: applyNodeChanges(changes, get().nodes),
         });
     },
 
     onNodeLabelChange: (changes: string, id: string) => {
-        set({
-            nodes: get().nodes.map(node => (
-                (node.id === id) ? ({
-                    ...node,
-                    data: {
-                        label: changes
-                    }
-                }) : (
-                    node
-                )
-            )),
-        });
-        socketManager.sendLabelChange(socketManager.getSocketId(), changes, id);
-    },
-
-    onNodeLabelChangeByEmit: (changes: string, id: string) => {
         set({
             nodes: get().nodes.map(node => (
                 (node.id === id) ? ({
@@ -147,21 +102,13 @@ const useStore = create<RFState>((set, get, _shallow) => ({
      */
     deleteNode: (id: string) => {
         set({
-            edges:    get().edges.filter(edge => (edge.source !== id || edge.target !== id)),
+            edges:    get().edges.filter(edge => (edge.source !== id && edge.target !== id)),
             handlers: get().handlers.filter(handle => handle.id !== id),
             nodes:    get().nodes.filter(node => node.id !== id),
         });
     },
 
     onEdgesChange: (changes: EdgeChange[]) => {
-        set({
-            edges: applyEdgeChanges(changes, get().edges),
-        });
-        //** ToDo: set socketId in the store
-        socketManager.sendEdgeChanges(socketManager.getSocketId(), changes);
-    },
-
-    onEdgesChangeByEmit: (changes: EdgeChange[]) => {
         set({
             edges: applyEdgeChanges(changes, get().edges),
         });
@@ -208,6 +155,8 @@ const useStore = create<RFState>((set, get, _shallow) => ({
             handlers: get().handlers.concat(handleConfig),
         });
     }
-}));
+})
+// )
+);
 
 export default useStore;

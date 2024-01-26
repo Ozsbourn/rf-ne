@@ -51,9 +51,6 @@ function App() {
             return;
         }
 
-        // Should be dynamicaly, so need to store width and height of custom nodes 
-        //      like mutable constants somewhere, cuz get it from css isn't good way
-        //      -- Now straight offset for testing tho
         const position: XYPosition = reactFlowInstance!.screenToFlowPosition({
             x: event.clientX - 115,
             y: event.clientY - 30,
@@ -61,7 +58,7 @@ function App() {
         const id = getNewId();
         const newNode = {
             id:   id,
-            type: (type === 'custom') ? 'myNode' : type,
+            type: (type === 'custom') ? 'BaseNode' : type,
             position: position,
             data: {
                 label: `${type} node`,
@@ -69,8 +66,10 @@ function App() {
         }
 
         let IdsArr = [getNewHandleId(), getNewHandleId(), getNewHandleId(), getNewHandleId()];
-        const tmp: CustomNodeConfig = createNodeConfigPattern(id, IdsArr);
-        appendHandlers(tmp);
+        if (type === 'custom') {
+            const tmp: CustomNodeConfig = createNodeConfigPattern(id, IdsArr);
+            appendHandlers(tmp);   
+        }
         appendNode(newNode);
     }, [reactFlowInstance],);
 
@@ -131,12 +130,12 @@ function App() {
                     >
                         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        {/*<MiniMap 
+                        <MiniMap 
                             style={{border: "1px solid #000000"}}
                             nodeColor={'#cd0ffe'}
                             pannable 
                             zoomable
-                        />*/}
+                        />
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>

@@ -4,16 +4,10 @@ import { memo,
          useState } from 'react';
 import { Handle, 
          NodeToolbar,
-         NodeResizer, } from 'reactflow';
+         NodeResizer } from 'reactflow';
 
-// import Copy   from '../assets/copy.svg';
-// import Expand from '../assets/expand-arrows.svg';
-// import Close  from '../assets/cross.svg';
-
-import useStore         from '../store/store';
-
-// import { Modal } from 'antd';
-import Label            from './Label';
+import useStore         from '../../store/store';
+import Label            from '../Label';
 
 
 
@@ -26,13 +20,7 @@ const CustomNode = ({ id, data, selected }) => {
     } = useStore();
 
     const [label, setLabel]             = useState(data.label);
-    const [isShowInput, setIsShowInput] = useState(false); 
-
-    // const [nodeHeight, setNodeHeight] = useState();
-    // const [nodeWidth,   setNodeWidth] = useState();
-
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [isShowInput, setIsShowInput] = useState(false);
 
     const handleCopy   = () => {
         {/* TODO: here should be node copy logic */}
@@ -45,30 +33,12 @@ const CustomNode = ({ id, data, selected }) => {
           *     
           */}
     };
-    const handleEdit   = () => {
-        // setNodeEditId(id);
-        // showModal();
-    };
+    const handleEdit   = () => {};
     const handleDelete = () => {
         deleteNode(id);
     };
 
-
-    // Handlers for Modal
-    // const showModal = () => {
-    //     setIsModalOpen(true);
-    // };
-    // const handleOk = () => {
-    //     setIsModalOpen(false);
-    // };
-    // const handleCancel = () => {
-    //     setIsModalOpen(false);
-    // };
-
-    useEffect(() => {
-        // setNodeWidth(ref.current.offsetWidth);
-        // setNodeHeight(ref.current.offsetHeight);
-    }, []);
+    useEffect(() => {}, []);
 
 
 
@@ -117,24 +87,6 @@ const CustomNode = ({ id, data, selected }) => {
                     />
                 ))
             }
-            
-            {/* Should be separated component: from here */}
-            {/*<Modal
-                title='Edit Node Window'
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-            >
-                <span>Label:</span>
-                <input 
-                    value={label}
-                    onChange={(e) => {
-                        setLabel(e.target.value);
-                        onNodeLabelChange(e.target.value, id);
-                    }}
-                />
-            </Modal>*/}
-            {/* to here w/o links between that component and anything in modal*/}
         </div>
     );
 }
