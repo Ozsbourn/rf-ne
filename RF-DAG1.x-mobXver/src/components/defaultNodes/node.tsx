@@ -7,10 +7,14 @@ import { Handle,
          Position, 
          NodeToolbar,
          NodeResizer } from 'reactflow';
+
+import Label     from '../Label';
+
+import { store } from '../../store/globalStore';
          
 
 
-const CustomNode = ({ data, selected }) => {
+const CustomNode = ({ id, data, selected }: any) => {
     const ref = useRef(null);
 
     const [label, setLabel]             = useState(data.label);

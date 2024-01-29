@@ -40,8 +40,8 @@ const Wrapper = observer(( { store } ) => {
         }
 
         const position: XYPosition = reactFlowInstance!.screenToFlowPosition({
-            x: event.clientX,
-            y: event.clientY,
+            x: event.clientX - 115,
+            y: event.clientY - 30,
         });
         const id = store.getNewId();
         const newNode = {
@@ -61,9 +61,14 @@ const Wrapper = observer(( { store } ) => {
         store.appendNode(newNode);
     }, [reactFlowInstance],);
 
-    const saveToJSON = (event) => {
+    const saveToJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const rfJsonInstance = reactFlowInstance!.toObject();
+
+        const handles = store.getAllHandles();
+        const rfJsonInstance = {
+            ...reactFlowInstance!.toObject(),
+            handles
+        }
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
             type: 'text/plain'

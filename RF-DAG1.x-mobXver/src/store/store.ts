@@ -1,6 +1,7 @@
 import { makeObservable,
          observable, 
          action } from 'mobx';
+import * as mobx from 'mobx'; 
 import {
     Connection,
     Edge,
@@ -10,17 +11,34 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
+    useStore,
 } from 'reactflow';
 
 import { CustomNodeConfig } from '../nodeConfig';
 
-// import initialNodes from '../initialData/nodes';
-// import initialEdges from '../initialData/edges';
+import { WebrtcProvider } from "y-webrtc";
+import { enableMobxBindings } from "@syncedstore/core";
+import { syncedStore, getYjsDoc } from "@syncedstore/core";
 
-// import * as Y from 'yjs';
-// import yjs from "zustand-middleware-yjs";
-// import { WebrtcProvider } from 'y-webrtc';
 
+
+enableMobxBindings(mobx);
+
+
+const syncStore = syncedStore({
+    // nodes: [] as Node[],
+    // edges: [] as Edge[],
+    // 
+    nodes: [] as Node[],
+    edges: [] as Edge[],
+
+    // Err: non-callable
+    // changeNodes: (nodeChanges: Node[]) => {
+    //     nodes = nodeChanges;
+    // },
+    
+
+});
 
 
 export class SchemeStore {
@@ -33,7 +51,7 @@ export class SchemeStore {
     @observable handlers: CustomNodeConfig[];
 
     constructor(nodes: Node[], edges: Edge[]) {
-        makeObservable(this);
+        mobx.makeObservable(this);
 
         this.currId = 0;
 
@@ -136,17 +154,17 @@ export class SchemeStore {
     @action
     appendHandlers = (handleConfig: CustomNodeConfig) => {
         this.handlers = [...this.handlers, {
-            handleConfig    
+            ...handleConfig    
         }];
     }
 }
 
 
-// const ydoc = new Y.Doc();
-// const provider = new WebrtcProvider('room-name', ydoc, { 
-//     signaling: ['ws://localhost:4444']
-// });
-// const wsProvider = new WebsocketProvider('ws://localhost:1234', 'my-roomname', ydoc);
-// wsProvider.on('status', (event: any) => {
-//   console.log(event.status) // logs "connected" or "disconnected"
-// });
+const ydoc = getYjsDoc(syncStore);
+export const webrtcProvider = new WebrtcProvider('room-rf', ydoc, {
+    signaling: ['ws://localhost:4444'],
+    // maxConns: 3,
+}); 
+
+export const    connect = () => webrtcProvider.connect();
+export const disconnect = () => webrtcProvider.disconnect();
