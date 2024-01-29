@@ -11,7 +11,7 @@ import Label            from '../Label';
 
 
 
-const CustomNode = ({ id, data, selected }) => {
+const CustomNode = ({ id, data, selected } : any) => {
     const ref = useRef(null);
     const { 
         getHandlers, 

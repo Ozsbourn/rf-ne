@@ -1,6 +1,7 @@
 
 
-const Label = (props) => {
+
+const Label = (props: any) => {
     return (
         <span>
             {
@@ -17,8 +18,11 @@ const Label = (props) => {
                         onDoubleClick={props.handleDoubleClick}
                         style={{
                             display: 'inline-block',
-                            height:  '25px',
-                            minWidth: '100px'
+                            minHeight: '25px',
+                            height:  'fit-content',
+                            minWidth: '10px',
+                            width: 'fit-content',
+                            maxWidth: '200px'
                         }}
                     >
                         {props.value}

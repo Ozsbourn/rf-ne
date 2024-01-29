@@ -1,7 +1,8 @@
 import { 
        useCallback, 
        useState, 
-       useRef, 
+       useRef,
+       useEffect, 
 } from 'react';
 import ReactFlow, {
        ReactFlowProvider,
@@ -69,7 +70,7 @@ function App() {
         if (type === 'custom') {
             const tmp: CustomNodeConfig = createNodeConfigPattern(id, IdsArr);
             appendHandlers(tmp);   
-        }
+        } 
         appendNode(newNode);
     }, [reactFlowInstance],);
 
@@ -101,6 +102,8 @@ function App() {
         });
     }
 
+    useEffect(() => {}, [reactFlowInstance]);
+
 
 
     return (
@@ -130,12 +133,12 @@ function App() {
                     >
                         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        <MiniMap 
+                        {/*<MiniMap 
                             style={{border: "1px solid #000000"}}
                             nodeColor={'#cd0ffe'}
                             pannable 
                             zoomable
-                        />
+                        />*/}
                     </ReactFlow>
                 </div>
                 <div className='controls-panel'>
