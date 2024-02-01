@@ -1,5 +1,4 @@
 import { createWithEqualityFn as create } from 'zustand/traditional';
-
 import {
     Connection,
     Edge,
@@ -9,17 +8,13 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
+    EdgeProps,
+    MarkerType,
 } from 'reactflow';
 
 import { HandleConfig, CustomNodeConfig } from '../nodeConfig';
-
 import initialNodes  from '../initialData/nodes';
 import initialEdges  from '../initialData/edges';
-
-import { Doc } from 'yjs';
-import yjsMiddleware from "zustand-middleware-yjs";
-import { WebrtcProvider } from 'y-webrtc';
-// import { WebsocketProvider } from 'y-websocket';
 
 
 
@@ -47,15 +42,14 @@ type RFState = {
     getAllHandles:     ()           => CustomNodeConfig[];
    
     appendHandlers:    (handleConfig: CustomNodeConfig) => void;
+
+    getJsonScheme:     () => string;
+    setJsonScheme:     (scheme: string) => void;
 };
 
 
 
-const ydoc = new Doc();
-const provider = new WebrtcProvider('room-name', ydoc);
-// const provider = new WebsocketProvider('ws://localhost:1234', 'rf-ed-room', ydoc);
-const useStore = create<RFState>(
-    yjsMiddleware<RFState>(ydoc, 'shared', (set, get) => ({
+const useStore = create<RFState>((set: any, get: any) => ({
         currId: 0,
         getNewId: () => {
             return `dndnode_${get().currId++}`;
@@ -99,9 +93,9 @@ const useStore = create<RFState>(
          */
         deleteNode: (id: string) => {
             set({
-                edges:    get().edges.filter(edge => (edge.source !== id && edge.target !== id)),
-                handlers: get().handlers.filter(handle => handle.id !== id),
-                nodes:    get().nodes.filter(node => node.id !== id),
+                edges:    get().edges.filter((edge: Edge) => (edge.source !== id && edge.target !== id)),
+                handlers: get().handlers.filter((handle: HandleConfig) => handle.id !== id),
+                nodes:    get().nodes.filter((node: Node) => node.id !== id),
             });
         },
 
@@ -112,9 +106,13 @@ const useStore = create<RFState>(
         },
 
         onConnect: (connection: Connection) => {
+            const newEdge: any = { ...connection, type: 'defaultEdge', label: 'Put ur label here', markerEnd: { type: MarkerType.ArrowClosed } };
             set({
-                edges: addEdge(connection, get().edges),
+                edges: addEdge(newEdge, get().edges),
             });
+            // set({
+            //     edges: addEdge(connection, get().edges),
+            // });
         },
 
         appendNode: (node: Node) => {
@@ -124,7 +122,7 @@ const useStore = create<RFState>(
         },
 
         getHandlersCount:  (id: string) => {
-            const handles = get().handlers.filter((handler) => handler.id === id);
+            const handles = get().handlers.filter((handler: HandleConfig) => handler.id === id);
 
             if (handles.length == 0) {
                 return 0;
@@ -134,7 +132,7 @@ const useStore = create<RFState>(
         },
 
         getHandlers: (id: string) => {
-            const handles = get().handlers.filter((handler) => handler.id === id);
+            const handles = get().handlers.filter((handler: HandleConfig) => handler.id === id);
 
             if (handles.length == 0) {
                 return [];
@@ -151,8 +149,31 @@ const useStore = create<RFState>(
             set({
                 handlers: get().handlers.concat(handleConfig),
             });
-        }
-    }))
+        },
+
+        getJsonScheme: () => {
+            const nodes = get().nodes;
+            const edges = get().edges;
+            const handlers = get().handlers;
+
+            const json = {
+                nodes, 
+                edges, 
+                handlers
+            }
+
+            return JSON.stringify(json, null, 2);
+        },
+        setJsonScheme: (scheme: string) => {
+            const obj = JSON.parse(scheme);
+
+            set({
+                nodes: obj.nodes,
+                edges: obj.edges,
+                handlers: obj.handlers,
+            });
+        },
+    })
 );
 
 export default useStore;

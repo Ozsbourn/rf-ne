@@ -16,7 +16,7 @@ export default () => {
                     Drag&Drop these nodes at a schema:
                 </div>
 
-                <div className='dndnode input' onDragStart={(event) => onDragStart(event, 'input')} draggable>
+                {/*<div className='dndnode input' onDragStart={(event) => onDragStart(event, 'input')} draggable>
                     Input node
                 </div>
 
@@ -26,7 +26,7 @@ export default () => {
 
                 <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'output')} draggable>
                     Output node
-                </div>  
+                </div>  */}
 
                 <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'custom')} draggable>
                     Custom node

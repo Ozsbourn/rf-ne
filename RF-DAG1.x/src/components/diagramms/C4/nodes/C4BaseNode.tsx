@@ -1,8 +1,7 @@
 import { useState }  from 'react';
-import { Handle, NodeProps, Position } from 'reactflow';
+import { Handle, NodeProps, NodeResizer, Position } from 'reactflow';
 import Label         from '../../../Label';
-import { color } from '@uiw/react-codemirror';
-import useStore from '../../../../store/store';
+// import useStore from '../../../../store/store';
 
 
 type C4NodeInfo = {
@@ -25,7 +24,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 	const [isTCShowInput, setIsTCShowInput] = useState(false);    // TC - type content
 	const [isDShowInput,  setIsDShowInput]  = useState(false);    //  D - description
 
-	const { getNewHandleId } = useStore();
+	// const { getNewHandleId } = useStore();
 
 
 	const changeMLabel = (e: { target: { value: string; }; }) => {
@@ -48,7 +47,14 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 
 
 	return (
-		<div className='C4BaseNode'>
+		<div className='C4BaseNode' style={{minWidth: 250, width: '100%', maxWidth: 'fit-content', minHeight: 150, height: '100%'}}>
+			<NodeResizer 
+                color='#ff0071' 
+                isVisible={nodeProps.selected} 
+                minWidth={250} 
+                minHeight={150}
+            />
+
 			<Label
 				className='c4-mainLabel'
 				value={mainLabel}
@@ -94,7 +100,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 			{/* For test only - straight way */}
             <Handle 
                 id={'1'}
-                type='source' 
+                type='source'
                 position={Position.Left}
             />
             <Handle 

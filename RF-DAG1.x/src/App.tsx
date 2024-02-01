@@ -10,7 +10,7 @@ import ReactFlow, {
        Background,
        BackgroundVariant,
        XYPosition,
-       MiniMap,
+       // MiniMap,
        ConnectionMode,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -18,10 +18,11 @@ import 'reactflow/dist/style.css';
 import useStore  from './store/store';
 
 import Sidebar       from './components/Sidebar';
-import { nodeTypes } from './initialData/nodeTypes'; 
+import { nodeTypes } from './initialData/nodeTypes';
+import { edgeTypes } from './initialData/egdeTypes'; 
 import { CustomNodeConfig }        from './nodeConfig';
 import { createNodeConfigPattern } from './store/nodeConfigFactory';
-// import SocketManager from './sockManager/sockManager';
+import CodeEditor from './components/CodeEditor';
 
 
 
@@ -37,7 +38,8 @@ function App() {
             getNewId,
             appendHandlers,
             getNewHandleId,
-            deleteNode } = useStore();
+            deleteNode,
+    } = useStore();
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const onDragOver = useCallback((event: { preventDefault: () => void; dataTransfer: { dropEffect: string; }; }) => {
@@ -101,7 +103,6 @@ function App() {
             deleteNode(node.id);
         });
     }
-
     useEffect(() => {}, [reactFlowInstance]);
 
 
@@ -109,6 +110,10 @@ function App() {
     return (
         <div className='dndflow'>
             <ReactFlowProvider>
+                <div className='ceditor'>
+                    <CodeEditor />
+                </div>
+
                 <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                     <ReactFlow
                         nodes={nodes}
@@ -118,6 +123,7 @@ function App() {
                         onEdgesChange={onEdgesChange}
                         onConnect={onConnect}
                         nodeTypes={nodeTypes}
+                        edgeTypes={edgeTypes}
 
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
