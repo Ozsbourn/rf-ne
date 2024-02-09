@@ -8,7 +8,7 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
-    EdgeProps,
+    // EdgeProps,
     MarkerType,
 } from 'reactflow';
 
@@ -45,6 +45,10 @@ type RFState = {
 
     getJsonScheme:     () => string;
     setJsonScheme:     (scheme: string) => void;
+    // for test parsing only 
+    jsonAdapterScheme: string; 
+    setAdapterOutput:  (jsonScheme: string) => void;
+    getAdapterOutput:  () => string;
 };
 
 
@@ -164,6 +168,7 @@ const useStore = create<RFState>((set: any, get: any) => ({
 
             return JSON.stringify(json, null, 2);
         },
+        
         setJsonScheme: (scheme: string) => {
             const obj = JSON.parse(scheme);
 
@@ -172,6 +177,17 @@ const useStore = create<RFState>((set: any, get: any) => ({
                 edges: obj.edges,
                 handlers: obj.handlers,
             });
+        },
+
+        jsonAdapterScheme: '',
+        setAdapterOutput:  (jsonScheme: string) => {
+            set({
+                jsonAdapterScheme: jsonScheme,
+            });
+        },
+
+        getAdapterOutput:  () => {
+            return get().jsonAdapterScheme;
         },
     })
 );

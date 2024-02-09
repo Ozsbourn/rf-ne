@@ -10,7 +10,7 @@ import ReactFlow, {
        Background,
        BackgroundVariant,
        XYPosition,
-       // MiniMap,
+       MiniMap,
        ConnectionMode,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -23,6 +23,8 @@ import { edgeTypes } from './initialData/egdeTypes';
 import { CustomNodeConfig }        from './nodeConfig';
 import { createNodeConfigPattern } from './store/nodeConfigFactory';
 import CodeEditor from './components/CodeEditor';
+// for test here now
+import Adapter from './pages/adapter';
 
 
 
@@ -110,6 +112,10 @@ function App() {
     return (
         <div className='dndflow'>
             <ReactFlowProvider>
+                <div>
+                    <Adapter />
+                </div>
+
                 <div className='ceditor'>
                     <CodeEditor />
                 </div>
@@ -139,15 +145,15 @@ function App() {
                     >
                         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                         <Controls />
-                        {/*<MiniMap 
+                        <MiniMap 
                             style={{border: "1px solid #000000"}}
                             nodeColor={'#cd0ffe'}
                             pannable 
                             zoomable
-                        />*/}
+                        />
                     </ReactFlow>
                 </div>
-                <div className='controls-panel'>
+                {/*<div className='controls-panel'>
                     <Sidebar />
 
                     <div className='dndnode input save-button' onClick={saveToJSON}>
@@ -156,7 +162,7 @@ function App() {
                     <div className='dndnode input save-button' onClick={openJSON}>
                         Open JSON
                     </div>
-                </div>
+                </div>*/}
             </ReactFlowProvider>
         </div>
     );
