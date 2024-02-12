@@ -2,7 +2,7 @@ import express from 'express'
 import { headerTypes, headerValues } from './configs/corsConfigs';
 
 import plantumlDecoder from 'plantuml-encoder';
-import { parsePuml } from './controllers/parsePuml';
+import { parsePuml }   from './controllers/parsePuml';
 
 
 
@@ -13,9 +13,9 @@ app.use(express.json())                         // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use(function(req, res, next) {
-  res.header(headerTypes.acaOrigin, headerValues.acaOrigin); 
-  res.header(headerTypes.acaHeaders, headerValues.acaHeaders); 
-  res.header(headerTypes.acaMethods, headerValues.acaMethods); 
+  res.header(headerTypes.acaOrigin,      headerValues.acaOrigin); 
+  res.header(headerTypes.acaHeaders,     headerValues.acaHeaders); 
+  res.header(headerTypes.acaMethods,     headerValues.acaMethods); 
   res.header(headerTypes.acaCredentials, headerValues.acaCredentials); 
   
   next();
