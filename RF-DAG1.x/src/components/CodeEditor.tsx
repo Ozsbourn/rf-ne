@@ -37,7 +37,7 @@ const CodeEditor = () => {
         <>
             <CodeMirror
                 style={{
-                    width: '550px',
+                    width: '350px',
                     minHeight: '100%',
                     maxHeight: '100%',
                     overflow: 'auto',
@@ -70,7 +70,8 @@ const CodeEditor = () => {
                 style={{
                     width: '100px', 
                     height: '25px'
-                }} />
+                }} 
+            />
         </>
     );
 };

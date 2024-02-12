@@ -4,7 +4,6 @@ import {
     EdgeProps, 
     MarkerType, 
     getSmoothStepPath, } from "reactflow";
-// import Label from "../Label";
 import { useState } from "react";
 
 
@@ -19,7 +18,6 @@ const CustomEdge = (props: EdgeProps) => {
         targetPosition: props.targetPosition,
     });
     const [label, setLabel] = useState((props.label) ? props.label : 'Put label here');
-    // const [isShowInput, setIsShowInput] = useState(false);
 
 
 
@@ -37,28 +35,14 @@ const CustomEdge = (props: EdgeProps) => {
                         position: 'absolute',
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         pointerEvents: 'all',
+
+                        backgroundColor: 'rgba(10, 10, 10, 0)',
+                        border: 'none'
                     }}
                     className="nodrag nopan"
                 >
                     {label}
                 </button>
-                {/*<Label 
-                    value={label}
-
-                    className="nodrag nopan"
-                    style={{
-                        position: 'absolute',
-                        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-                        pointerEvents: 'all',
-                    }}
-
-                    handleChange={(e: any) => {
-                        setLabel(e.target.value);
-                    }}
-                    handleDoubleClick={() => setIsShowInput(true)}
-                    handleBlur={() => setIsShowInput(false)}
-                    isShowInput={isShowInput}
-                />*/}
             </EdgeLabelRenderer>
         </>
     );

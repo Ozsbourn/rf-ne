@@ -8,7 +8,6 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
-    // EdgeProps,
     MarkerType,
 } from 'reactflow';
 
@@ -21,6 +20,10 @@ import initialEdges  from '../initialData/edges';
 type RFState = {
     currId:   number;
     getNewId: () => string;
+
+    schemePumlMetaInfo: any;
+    setSchemePumlMetaInfo: (metaInfo: any) => void;
+    getSchemePumlMetaInfo: () => any;
 
     nodes:  Node[];
     edges:  Edge[];
@@ -45,9 +48,10 @@ type RFState = {
 
     getJsonScheme:     () => string;
     setJsonScheme:     (scheme: string) => void;
+
     // for test parsing only 
     jsonAdapterScheme: string; 
-    setAdapterOutput:  (jsonScheme: string) => void;
+    setAdapterOutput:  (jsonScheme: any) => void;
     getAdapterOutput:  () => string;
 };
 
@@ -57,6 +61,16 @@ const useStore = create<RFState>((set: any, get: any) => ({
         currId: 0,
         getNewId: () => {
             return `dndnode_${get().currId++}`;
+        },
+
+        schemePumlMetaInfo: {},
+        setSchemePumlMetaInfo: (metaInfo: any) => {
+            set({
+                schemePumlMetaInfo: metaInfo,
+            });
+        },
+        getSchemePumlMetaInfo: () => {
+            return get().schemePumlMetaInfo;
         },
 
         nodes: initialNodes,
@@ -114,9 +128,6 @@ const useStore = create<RFState>((set: any, get: any) => ({
             set({
                 edges: addEdge(newEdge, get().edges),
             });
-            // set({
-            //     edges: addEdge(connection, get().edges),
-            // });
         },
 
         appendNode: (node: Node) => {
@@ -180,9 +191,16 @@ const useStore = create<RFState>((set: any, get: any) => ({
         },
 
         jsonAdapterScheme: '',
-        setAdapterOutput:  (jsonScheme: string) => {
+        setAdapterOutput:  (jsonScheme: any) => {
             set({
-                jsonAdapterScheme: jsonScheme,
+                jsonAdapterScheme:  jsonScheme,
+                
+                schemePumlMetaInfo: jsonScheme.meta, 
+
+                nodes:              jsonScheme.schemeData.nodes,
+                edges:              jsonScheme.schemeData.edges,
+
+                /* Here should be groups also */
             });
         },
 

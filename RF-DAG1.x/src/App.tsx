@@ -153,7 +153,7 @@ function App() {
                         />
                     </ReactFlow>
                 </div>
-                {/*<div className='controls-panel'>
+                <div className='controls-panel'>
                     <Sidebar />
 
                     <div className='dndnode input save-button' onClick={saveToJSON}>
@@ -162,7 +162,7 @@ function App() {
                     <div className='dndnode input save-button' onClick={openJSON}>
                         Open JSON
                     </div>
-                </div>*/}
+                </div>
             </ReactFlowProvider>
         </div>
     );
