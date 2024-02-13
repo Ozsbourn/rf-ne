@@ -6,6 +6,7 @@ import CodeMirror, { basicSetup } from "@uiw/react-codemirror";
 import useStore                   from "../store/store";
 
 import axios           from "axios";
+import { reqConfig }   from "../configs/requestsConfig";
 import plantumlEncoder from 'plantuml-encoder';
 
 import rfBuilder, { BuilderResponse } from "../libs/rfBuilder";
@@ -14,20 +15,39 @@ import rfBuilder, { BuilderResponse } from "../libs/rfBuilder";
 
 const parseMetaInfo = (pumlScheme: string) => {
     let clearedString = pumlScheme.replace(/\(/g, ' ')
-                           .replace(/\)/g, ' ')
-                           .replace(/','/g, ' ');
+                                  .replace(/\)/g, ' ')
+                                  .replace(/','/g, ' ');
     let subdividedString = clearedString.split('\n');
 
-    let meta: any = {};
+    let meta: any = { incs: [], defs: [], };
     for (let i = 0; i < subdividedString.length; i++) {
         /* Serving metainfo of PlantUML */
         if (subdividedString[i].match('!include')) {
-            meta = { ...meta, inc: subdividedString[i].trim() }
+            meta = { 
+                ...meta, 
+                incs: [ 
+                    ...meta.incs, 
+                    subdividedString[i].trim()
+                ]
+            }
+        } else if (subdividedString[i].match('!define')) {
+            meta = { 
+                ...meta, 
+                defs: [ 
+                    ...meta.defs, subdividedString[i].trim(),
+                ]
+            }
         } else if (subdividedString[i].match('LAYOUT_WITH_LEGEND' )) {
-            meta = { ...meta, legend: subdividedString[i].trim() + '()' }
+            meta = { 
+                ...meta, 
+                legend: subdividedString[i].trim() + '()', 
+            }
         } else if (subdividedString[i].match('title')) {
             let title = subdividedString[i].replace('title', '').replace(/' '/g, '');  
-            meta = { ...meta, title: title.trim() }
+            meta = { 
+                ...meta, 
+                title: title.trim(),
+            }
         }
     }
 
@@ -67,12 +87,30 @@ const adaptResponsedDataToRFScheme = (responsedData: any) => {
                 ...scheme,
                 schemeData: {
                     ...scheme.schemeData,
-                    groups: [
-                        ...scheme.schemeData.groups,
+                    nodes: [
+                        ...scheme.schemeData.nodes,
                         newElement.object,
                     ],
                 }
             }
+
+            for (let nestedNode of element.elements) {
+                const childNode: BuilderResponse = rfBuilder.getRfObject(nestedNode, newElement.object.id);
+             
+                scheme = {
+                    ...scheme,
+                    schemeData: {
+                        ...scheme.schemeData,
+                        nodes: [
+                            ...scheme.schemeData.nodes,
+                            childNode.object,
+                        ],
+                    }
+                }
+            }
+        } else {
+            // Ignore an empty object, if current ver. of service isn't support this command
+            continue;
         }
     }
 
@@ -85,13 +123,13 @@ const Adapter = () => {
     const { setAdapterOutput } = useStore();
     const [code, setCode] = useState(contextExample);
 
-	useEffect(() => {}, []);
+    useEffect(() => {}, []);
 
     const sendToServer = () => {
         const encoded = plantumlEncoder.encode(code);
 
         // Full way for test
-        axios.post('http://localhost:5000', {
+        axios.post(reqConfig.serverUrl, {
             pumlEncoded: encoded
         })
         .then(function (res) {
@@ -114,10 +152,10 @@ const Adapter = () => {
         <>
             <CodeMirror
                 style={{
-                    width: '350px',
+                    width:     '550px',
                     minHeight: '100%',
                     maxHeight: '100%',
-                    overflow: 'auto',
+                    overflow:  'auto',
                     overflowY: 'scroll',
                 }}
 

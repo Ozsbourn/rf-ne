@@ -5,26 +5,46 @@ import Label         from '../../../Label';
 
 
 type C4NodeInfo = {
-    mainLabel:   string;
-    nodeType:    string;
-    typeContent: string;
-    description: string;
+    mainLabel:    string;
+    nodeType:     string;
+    description?: string;
+
+    sprite?:      string, 
+    tags?:        string, 
+    link?:        string, 
+    type?:        string,  
+    
+    baseShape?:   string
 };
 
 
-
+/* 
+ * PlantUML params for node:
+ * (
+ *      alias      -> id, 
+ *      label      -> mainLabel, 
+ *      ?descr     -> decription, 
+ *      ?sprite    -> sprite, 
+ *      ?tags      -> tags, 
+ *      ?link      -> link, 
+ *      ?type      -> nodeType,  
+ *      ?baseShape -> shape
+ * )
+ * 
+ */
 const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
-    const [mainLabel, setMainLabel]     = useState(nodeProps.data.mainLabel);
-    const [nodeType,  setNodeType]      = useState(nodeProps.data.nodeType);
-    const [typeContent, setTypeContent] = useState(nodeProps.data.typeContent);
+    const [mainLabel,   setMainLabel]   = useState(nodeProps.data.mainLabel);
     const [description, setDescription] = useState(nodeProps.data.description);
+    const [sprite,      setSprite]      = useState(nodeProps.data.sprite);        // unused rn
+    const [tags,        setTags]        = useState(nodeProps.data.tags);          // unused rn
+    const [link,        setLink]        = useState(nodeProps.data.link);          // unused rn
+    const [nodeType,    setNodeType]    = useState(nodeProps.data.nodeType);
+    const [baseShape,   setBaseShape]   = useState(nodeProps.data.baseShape);     // unused rn
+
     
     const [isMLShowInput, setIsMLShowInput] = useState(false);    // ML - main label
     const [isNTShowInput, setIsNTShowInput] = useState(false);    // NT - node type
-    const [isTCShowInput, setIsTCShowInput] = useState(false);    // TC - type content
     const [isDShowInput,  setIsDShowInput]  = useState(false);    //  D - description
-
-    // const { getNewHandleId } = useStore();
 
 
     const changeMLabel = (e: { target: { value: string; }; }) => {
@@ -33,10 +53,6 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
     }
     const changeNodeType = (e: { target: { value: string; }; }) => {
         setNodeType(e.target.value);
-        // onNodeLabelChange(e.target.value, id);
-    }
-    const changeTypeContent = (e: { target: { value: string; }; }) => {
-        setTypeContent(e.target.value);
         // onNodeLabelChange(e.target.value, id);
     }
     const changeDescription = (e: { target: { value: string; }; }) => {
@@ -74,15 +90,6 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                     handleDoubleClick={() => setIsNTShowInput(true)}
                     isShowInput={isNTShowInput}
                 />
-                <span> : </span>
-                <Label
-                    className='c4-typeContent'
-                    value={typeContent}
-                    handleChange={changeTypeContent}
-                    handleBlur={() => setIsTCShowInput(false)}
-                    handleDoubleClick={() => setIsTCShowInput(true)}
-                    isShowInput={isTCShowInput}
-                />
                 <span>]</span>
             </div>
             
@@ -105,7 +112,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             />
             <Handle 
                 id={'2'}
-                type='source' 
+                type='target' 
                 position={Position.Top}
             />
             <Handle 

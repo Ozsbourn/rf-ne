@@ -4,21 +4,25 @@ import {
 import CodeMirror, { basicSetup } from '@uiw/react-codemirror';
 import useStore from '../store/store';
 import { json } from '@codemirror/lang-json';
-import axios from 'axios';
+
+// test rn
+import dataExchanger from '../libs/dataExchanger';
 
 
 
 // For internal json
 const CodeEditor = () => {
     const { 
-    	// getJsonScheme, 
-    	// setJsonScheme, 
-    	getAdapterOutput } = useStore();
-    const [code, setCode]   = useState('');
+        // getJsonScheme, 
+        // setJsonScheme, 
+        getAdapterOutput } = useStore();
+    const [code, setCode]   = useState('{}');
     
     const updateCodeInEditor = () => {
         // setCode(getJsonScheme());
-    	setCode(JSON.stringify(getAdapterOutput(), null, 2));
+        const tmp = JSON.stringify(getAdapterOutput(), null, 2); 
+        setCode(tmp);
+        console.log(dataExchanger.toPuml(tmp));
     };
     const updateCodeInStore = () => {
         // setJsonScheme(code)
