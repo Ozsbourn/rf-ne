@@ -1,4 +1,7 @@
 import React from 'react';
+import { 
+    Button, 
+} from 'antd';
 
 
 
@@ -16,7 +19,7 @@ export default () => {
                     Drag&Drop these nodes at a schema:
                 </div>
 
-                <div className='dndnode input' onDragStart={(event) => onDragStart(event, 'input')} draggable>
+                {/*<div className='dndnode input' onDragStart={(event) => onDragStart(event, 'input')} draggable>
                     Input node
                 </div>
 
@@ -30,10 +33,13 @@ export default () => {
 
                 <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'custom')} draggable>
                     Custom node
-                </div>      
-            </div>
+                </div>  */}
 
-            <div className='nodeEditFields'>
+                <Button type='primary' onDragStart={(event) => onDragStart(event, 'C4Node')} draggable style={{
+                    width: '95%'
+                }}>
+                    C4 Node     
+                </Button>     
             </div>
         </aside>
     );

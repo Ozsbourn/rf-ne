@@ -1,6 +1,7 @@
-import { makeObservable,
+import { 
          observable, 
-         action } from 'mobx';
+         action,
+} from 'mobx';
 import * as mobx from 'mobx'; 
 import {
     Connection,
@@ -11,38 +12,47 @@ import {
     addEdge,
     applyNodeChanges,
     applyEdgeChanges,
-    useStore,
 } from 'reactflow';
 
 import { CustomNodeConfig } from '../nodeConfig';
 
 import { WebrtcProvider } from "y-webrtc";
-import { enableMobxBindings } from "@syncedstore/core";
-import { syncedStore, getYjsDoc } from "@syncedstore/core";
+
+// For collab mode
+// import { enableMobxBindings } from "@syncedstore/core";
+// import { syncedStore, getYjsDoc } from "@syncedstore/core";
+
+// Init data
+import initialNodes   from '../initialData/nodes';
+import initialEdges   from '../initialData/edges';
+import contextExample from '../initialData/context';
 
 
 
-enableMobxBindings(mobx);
+// enableMobxBindings(mobx);
 
 
-const syncStore = syncedStore({
-    // nodes: [] as Node[],
-    // edges: [] as Edge[],
-    // 
-    nodes: [] as Node[],
-    edges: [] as Edge[],
+// const syncStore = syncedStore({
+//     // nodes: [] as Node[],
+//     // edges: [] as Edge[],
+//     // 
+//     nodes: [] as Node[],
+//     edges: [] as Edge[],
 
-    // Err: non-callable
-    // changeNodes: (nodeChanges: Node[]) => {
-    //     nodes = nodeChanges;
-    // },
+//     // Err: non-callable
+//     // changeNodes: (nodeChanges: Node[]) => {
+//     //     nodes = nodeChanges;
+//     // },
     
 
-});
+// });
 
 
 export class SchemeStore {
     currId: number = 0;
+
+    // TODO: specify meta like a type
+    schemePumlMetaInfo: any = {};
 
     @observable nodes: Node[];
     @observable edges: Edge[];
@@ -73,6 +83,12 @@ export class SchemeStore {
         return `handleId_${this.currHandleId++}`;
     }
 
+    setSchemePumlMetaInfo = (metaInfo: any) => {
+        this.schemePumlMetaInfo = metaInfo;
+    }
+    getSchemePumlMetaInfo = () => {
+        return this.schemePumlMetaInfo;
+    }
 
     @action
     onNodesChange = (changes: NodeChange[]) => {
@@ -97,6 +113,17 @@ export class SchemeStore {
     onEdgesChange = (changes: EdgeChange[]) => {
         this.edges = applyEdgeChanges(changes, this.edges);
     } 
+
+
+    @action
+    updateNodeData = (id: string, data: any) => {
+        for (let i of this.nodes) {
+            if (i.id === id) {
+                i.data = data;
+            }
+        }
+    }
+
     
     @action
     onConnect = (connection: Connection) => {
@@ -160,11 +187,11 @@ export class SchemeStore {
 }
 
 
-const ydoc = getYjsDoc(syncStore);
-export const webrtcProvider = new WebrtcProvider('room-rf', ydoc, {
-    signaling: ['ws://localhost:4444'],
-    // maxConns: 3,
-}); 
+// const ydoc = getYjsDoc(syncStore);
+// export const webrtcProvider = new WebrtcProvider('room-rf', ydoc, {
+//     signaling: ['ws://localhost:4444'],
+//     // maxConns: 3,
+// }); 
 
-export const    connect = () => webrtcProvider.connect();
-export const disconnect = () => webrtcProvider.disconnect();
+// export const    connect = () => webrtcProvider.connect();
+// export const disconnect = () => webrtcProvider.disconnect();

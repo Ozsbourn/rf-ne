@@ -1,6 +1,6 @@
 {
-  "name": "vite-react-flow-template",
-  "version": "0.0.0",
+  "name": "rf-dia-editor",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/language": "^6.10.0",
+    "@tisoap/react-flow-smart-edge": "^3.0.0",
+    "@uiw/react-codemirror": "^4.21.21",
     "@syncedstore/core": "^0.6.0",
+    "antd": "^5.13.1",
+    "axios": "^1.6.7",
+    "plantuml-encoder": "^1.4.0",
+    "plantuml-parser": "^0.4.0",
     "mobx": "^6.12.0",
     "mobx-react-lite": "^4.0.5",
     "react": "^18.2.0",
@@ -20,6 +28,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/plantuml-encoder": "^1.4.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

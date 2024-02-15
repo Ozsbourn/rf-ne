@@ -17,9 +17,12 @@ import 'reactflow/dist/style.css';
 import { observer } from 'mobx-react-lite';
 
 import { nodeTypes } from '../initialData/nodeTypes'; 
+import { edgeTypes } from '../initialData/egdeTypes'; 
+
 import { CustomNodeConfig }        from '../nodeConfig';
 import { createNodeConfigPattern } from '../store/nodeConfigFactory';
 import Sidebar       from './Sidebar';
+import { Button, Flex } from 'antd';
 
 
 
@@ -102,6 +105,7 @@ const Wrapper = observer(( { store } ) => {
                         onEdgesChange={store.onEdgesChange}
                         onConnect={store.onConnect}
                         nodeTypes={nodeTypes}
+                        edgeTypes={edgeTypes}
 
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
@@ -119,21 +123,35 @@ const Wrapper = observer(( { store } ) => {
                         <Controls />
                         <MiniMap 
                             style={{border: "1px solid #000000"}}
-                            nodeColor={'#cd0ffe'}
+                            nodeColor={'#4071ff'}
+
                             pannable 
                             zoomable
                         />
                     </ReactFlow>
                 </div>
-                <div className='controls-panel'>
+                <div className='controls-panel' style={{
+                    height: '100%'
+                }}>
                     <Sidebar />
 
-                    <div className='dndnode input save-button' onClick={saveToJSON}>
-                        Save to JSON
-                    </div>
-                    <div className='dndnode input save-button' onClick={openJSON}>
-                        Open JSON
-                    </div>
+                    
+                    <Flex align='center' vertical={true} style={{
+                        width: '100%',
+                        height: '85%',
+                        gap: 5
+                    }}>
+                        <Button type='primary' onClick={saveToJSON} style={{
+                            width: '95%'
+                        }}>
+                            Save to JSON
+                        </Button>
+                        <Button type='primary' onClick={openJSON} style={{
+                            width: '95%'
+                        }}>
+                            Open JSON
+                        </Button>
+                    </Flex>
                 </div>
             </ReactFlowProvider>
         </div>
