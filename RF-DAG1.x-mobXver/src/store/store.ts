@@ -15,6 +15,7 @@ import {
 } from 'reactflow';
 
 import { CustomNodeConfig } from '../nodeConfig';
+import { layouter } from '../libs/nodeFormatter';
 
 
 
@@ -60,8 +61,14 @@ export class SchemeStore {
         return this.schemePumlMetaInfo;
     }
 
-    getNode = (nodeId: string) => {
-        return this.nodes.filter((node) => node.id === nodeId);
+    /**
+     * Gets the node.
+     *
+     * @param      {string}  nodeId  The node identifier
+     * @return     {<type>}  The node.
+     */
+    getNode = (nodeId: string = '') => {
+        return (nodeId !== '') ? this.nodes.filter((node) => node.id === nodeId) : mobx.toJS(this.nodes[0]);
     };
 
     @action
@@ -164,8 +171,14 @@ export class SchemeStore {
     @action 
     setAdapterOutput = (jsonScheme: any) => {
         this.schemePumlMetaInfo = {...jsonScheme.meta};
-        this.nodes = jsonScheme.schemeData.nodes;
-        this.edges = [...jsonScheme.schemeData.edges];
+
+        const { nodes: layoutedNodes, edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, jsonScheme.schemeData.edges);
+
+        // this.nodes = jsonScheme.schemeData.nodes;
+        // this.edges = [...jsonScheme.schemeData.edges];
+
+        this.nodes = layoutedNodes;
+        this.edges = layoutedEdges;
     }
     getAdapterOutput = () => {
         return {

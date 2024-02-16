@@ -3,25 +3,25 @@ import { Node } from 'reactflow';
 
 
 export default [
+  // {
+  //   id: '1',
+  //   type: 'input',
+  //   data: { label: 'Input' },
+  //   position: { x: 250, y: 25 },
+  // },
+  // {
+  //   id: '2',
+  //   data: { label: 'Default' },
+  //   position: { x: 100, y: 125 },
+  // },
+  // {
+  //   id: '3',
+  //   type: 'output',
+  //   data: { label: 'Output' },
+  //   position: { x: 250, y: 250 },
+  // },
   {
     id: '1',
-    type: 'input',
-    data: { label: 'Input' },
-    position: { x: 250, y: 25 },
-  },
-  {
-    id: '2',
-    data: { label: 'Default' },
-    position: { x: 100, y: 125 },
-  },
-  {
-    id: '3',
-    type: 'output',
-    data: { label: 'Output' },
-    position: { x: 250, y: 250 },
-  },
-  {
-    id: '4',
     type: 'C4Node',
     data: {
       mainLabel:   'Web-application Page',
@@ -33,7 +33,7 @@ export default [
   },
 
   {
-    id: '5',
+    id: '2',
     type: 'C4Node',
     data: {
       mainLabel:   'Sign-In Controller',
@@ -44,7 +44,7 @@ export default [
     position: { x: 450, y: 350 },
   },
   {
-    id: '6',
+    id: '3',
     type: 'C4Node',
     data: {
       mainLabel:   'E-mail system',
@@ -55,7 +55,7 @@ export default [
     position: { x: 750, y: 355 },
   },
   {
-    id: '7',
+    id: '4',
     type: 'C4Node',
     data: {
       mainLabel:   'Database for service logic',
