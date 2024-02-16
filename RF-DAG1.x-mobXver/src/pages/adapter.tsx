@@ -13,7 +13,6 @@ import rfBuilder, { BuilderResponse } from "../libs/rfBuilder";
 import dataExchanger from "../libs/dataExchanger";
 
 import { Button, Flex } from "antd";
-// import nodeFormatter    from "../libs/nodeFormatter";
 
 
 
@@ -117,7 +116,6 @@ const adaptResponsedDataToRFScheme = (responsedData: any) => {
             continue;
         }
     }
-    // nodeFormatter.endFormatting();
 
     return scheme;
 };

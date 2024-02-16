@@ -1,5 +1,4 @@
 import { MarkerType, XYPosition } from "reactflow";
-// import nodeFormatter  from "./nodeFormatter";
 
 
 
@@ -74,7 +73,6 @@ class RFObjectsBuilder {
     };    
 
     _createNode = (object: any, parent: any = null) => {
-        // const pos: XYPosition = nodeFormatter.getNewPosition();
         const pos: XYPosition = { x: 0, y: 0, };
 
         return {
@@ -123,7 +121,6 @@ class RFObjectsBuilder {
     };
 
     _createBoundary = (object: any, parent: any = null) => {
-        // const pos: XYPosition = nodeFormatter.getNewPosition();
         const pos: XYPosition = { x: 0, y: 0, };
 
         let nodeIds = [];

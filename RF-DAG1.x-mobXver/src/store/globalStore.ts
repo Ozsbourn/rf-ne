@@ -1,5 +1,5 @@
 import { SchemeStore } from "./store";
-import { layouter }  from "../libs/nodeFormatter";
+import { layouter }  from "../libs/nodeLayouter";
 import initialNodes  from '../initialData/nodes';
 import initialEdges  from '../initialData/edges';
 

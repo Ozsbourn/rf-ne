@@ -1,6 +1,6 @@
 import { 
-         observable, 
-         action,
+    observable, 
+    action,
 } from 'mobx';
 import * as mobx from 'mobx'; 
 import {
@@ -15,7 +15,7 @@ import {
 } from 'reactflow';
 
 import { CustomNodeConfig } from '../nodeConfig';
-import { layouter } from '../libs/nodeFormatter';
+import { layouter } from '../libs/nodeLayouter';
 
 
 
@@ -61,14 +61,8 @@ export class SchemeStore {
         return this.schemePumlMetaInfo;
     }
 
-    /**
-     * Gets the node.
-     *
-     * @param      {string}  nodeId  The node identifier
-     * @return     {<type>}  The node.
-     */
     getNode = (nodeId: string = '') => {
-        return (nodeId !== '') ? this.nodes.filter((node) => node.id === nodeId) : mobx.toJS(this.nodes[0]);
+        return this.nodes.filter((node) => node.id === nodeId);
     };
 
     @action
@@ -167,18 +161,29 @@ export class SchemeStore {
     }
 
 
+    _updateCollection = (nodes: Node[]) => {
+        return nodes.map(node => {
+            return {
+                ...node, 
+                data: {
+                    ...node.data,
+                }
+            }
+        });
+    }
     /* Adapter actions */
     @action 
     setAdapterOutput = (jsonScheme: any) => {
         this.schemePumlMetaInfo = {...jsonScheme.meta};
 
-        const { nodes: layoutedNodes, edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, jsonScheme.schemeData.edges);
+        const { nodes: layoutedNodes, 
+                edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, 
+                                                                      jsonScheme.schemeData.edges);
 
-        // this.nodes = jsonScheme.schemeData.nodes;
-        // this.edges = [...jsonScheme.schemeData.edges];
-
-        this.nodes = layoutedNodes;
-        this.edges = layoutedEdges;
+        this.nodes = this._updateCollection(layoutedNodes);
+        // this.nodes = JSON.parse(JSON.stringify(layoutedNodes));
+        // this.nodes = layoutedNodes;
+        this.edges = structuredClone(layoutedEdges);
     }
     getAdapterOutput = () => {
         return {

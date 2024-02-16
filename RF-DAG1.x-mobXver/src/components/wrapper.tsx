@@ -162,6 +162,14 @@ const Wrapper = observer(( { store }: any ) => {
                             Open JSON
                         </Button>
                     </Flex>
+
+                    {/*<pre>
+                        {
+                            store.nodes.map(node => {
+                                return JSON.stringify(node, null, 2);
+                            })
+                        }
+                    </pre>*/}
                 </div>
 
                 <ModalWrapper 
