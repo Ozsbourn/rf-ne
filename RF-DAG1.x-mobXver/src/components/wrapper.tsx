@@ -10,26 +10,33 @@ import ReactFlow, {
        MiniMap,
        ConnectionMode,
        BackgroundVariant,
-       XYPosition
+       XYPosition,
+       Node
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import { observer } from 'mobx-react-lite';
+import { observer }  from 'mobx-react-lite';
 
 import { nodeTypes } from '../initialData/nodeTypes'; 
 import { edgeTypes } from '../initialData/egdeTypes'; 
 
 import { CustomNodeConfig }        from '../nodeConfig';
 import { createNodeConfigPattern } from '../store/nodeConfigFactory';
-import Sidebar       from './Sidebar';
+import Sidebar          from './Sidebar';
 import { Button, Flex } from 'antd';
+import { nodeBuilder }  from '../libs/nodeBuilder';
+import { editStore }    from '../store/globalStore';
+import ModalWrapper     from './modalWrapper';
+import Adapter from '../pages/adapter';
 
 
 
-const Wrapper = observer(( { store } ) => {
+const Wrapper = observer(( { store }: any ) => {
     const reactFlowWrapper = useRef(null);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
+
+    /* D&D events handlers */
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
@@ -47,14 +54,7 @@ const Wrapper = observer(( { store } ) => {
             y: event.clientY - 30,
         });
         const id = store.getNewId();
-        const newNode = {
-            id:   id,
-            type: (type === 'custom') ? 'BaseNode' : type,
-            position: position,
-            data: {
-                label: `${type} node`,
-            }
-        }
+        const newNode = nodeBuilder.getNode(id, type, position);
 
         let IdsArr = [store.getNewHandleId(), store.getNewHandleId(), store.getNewHandleId(), store.getNewHandleId()];
         if (type === 'custom') {
@@ -63,7 +63,10 @@ const Wrapper = observer(( { store } ) => {
         }
         store.appendNode(newNode);
     }, [reactFlowInstance],);
+    /* D&D events handlers end */
 
+
+    /* JSON manipulators handlers */
     const saveToJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
@@ -84,18 +87,25 @@ const Wrapper = observer(( { store } ) => {
     const openJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
     }
+    /* JSON manipulators handlers end */
+
 
     const onDeleteNodeList = (nodes: Node[]) => {
-        nodes.map((node) => {
+        nodes.map((node: Node) => {
             store.deleteNode(node.id);
         });
     }
+
+
+    
 
 
 
     return (
         <div className='dndflow'>
             <ReactFlowProvider>
+                <Adapter />
+
                 <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                     <ReactFlow
                         nodes={store.nodes}
@@ -153,6 +163,11 @@ const Wrapper = observer(( { store } ) => {
                         </Button>
                     </Flex>
                 </div>
+
+                <ModalWrapper 
+                    store={editStore} 
+                    title='Edit component' 
+                />
             </ReactFlowProvider>
         </div>
     );

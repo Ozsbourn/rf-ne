@@ -1,11 +1,11 @@
-import { store } from './store/globalStore';
+import { editStore, store } from './store/globalStore';
 import Wrapper   from './components/wrapper';
 
 
 
 function App() {
     return (
-        <Wrapper store={store} />
+        <Wrapper store={store} editStore={editStore} />
     );
 }
 

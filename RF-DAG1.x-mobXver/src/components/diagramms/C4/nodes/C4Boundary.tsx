@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NodeResizer } from "reactflow";
 
 
@@ -27,9 +27,6 @@ const C4Boundary = (nodeProps: any) => {
     const [tags,        setTags]      = useState(nodeProps.data.tags);
     const [link,        setLink]      = useState(nodeProps.data.link);
 
-    useEffect(() => {
-        // TODO: sub on store changes here
-    }, []);
 
 
     return (

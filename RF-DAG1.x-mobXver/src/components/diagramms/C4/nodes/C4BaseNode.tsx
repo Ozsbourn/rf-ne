@@ -3,7 +3,7 @@ import { Handle, NodeProps, NodeResizer, NodeToolbar, Position } from 'reactflow
 import Label         from '../../../Label';
 
 // import { useEditStore } from  '../../../../store/editComponentsStore';
-import { store }           from '../../../../store/globalStore';
+import { editStore, store }           from '../../../../store/globalStore';
 
 
 type C4NodeInfo = {
@@ -65,13 +65,9 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
         // onNodeLabelChange(e.target.value, id);
     }
 
-    const handleCopy = () => {};
-    const handleEdit = () => { 
-        // setEditingNode(nodeProps.id); 
-    };
-    const handleDelete = () => {
-        store.deleteNode(nodeProps.id);
-    };
+    const handleCopy   = () => {};
+    const handleEdit   = () => { editStore.setEditingNode(nodeProps.id); };
+    const handleDelete = () => { store.deleteNode(nodeProps.id); };
 
     useEffect(() => {
         store.updateNodeData(nodeProps.id, { 

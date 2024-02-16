@@ -16,36 +16,6 @@ import {
 
 import { CustomNodeConfig } from '../nodeConfig';
 
-import { WebrtcProvider } from "y-webrtc";
-
-// For collab mode
-// import { enableMobxBindings } from "@syncedstore/core";
-// import { syncedStore, getYjsDoc } from "@syncedstore/core";
-
-// Init data
-import initialNodes   from '../initialData/nodes';
-import initialEdges   from '../initialData/edges';
-import contextExample from '../initialData/context';
-
-
-
-// enableMobxBindings(mobx);
-
-
-// const syncStore = syncedStore({
-//     // nodes: [] as Node[],
-//     // edges: [] as Edge[],
-//     // 
-//     nodes: [] as Node[],
-//     edges: [] as Edge[],
-
-//     // Err: non-callable
-//     // changeNodes: (nodeChanges: Node[]) => {
-//     //     nodes = nodeChanges;
-//     // },
-    
-
-// });
 
 
 export class SchemeStore {
@@ -90,6 +60,10 @@ export class SchemeStore {
         return this.schemePumlMetaInfo;
     }
 
+    getNode = (nodeId: string) => {
+        return this.nodes.filter((node) => node.id === nodeId);
+    };
+
     @action
     onNodesChange = (changes: NodeChange[]) => {
         this.nodes = applyNodeChanges(changes, this.nodes);
@@ -119,7 +93,7 @@ export class SchemeStore {
     updateNodeData = (id: string, data: any) => {
         for (let i of this.nodes) {
             if (i.id === id) {
-                i.data = data;
+                i.data = {...data};
             }
         }
     }
@@ -184,14 +158,22 @@ export class SchemeStore {
             ...handleConfig    
         }];
     }
+
+
+    /* Adapter actions */
+    @action 
+    setAdapterOutput = (jsonScheme: any) => {
+        this.schemePumlMetaInfo = {...jsonScheme.meta};
+        this.nodes = jsonScheme.schemeData.nodes;
+        this.edges = [...jsonScheme.schemeData.edges];
+    }
+    getAdapterOutput = () => {
+        return {
+            meta: mobx.toJS(this.getSchemePumlMetaInfo()),
+            schemeData: {
+                nodes: mobx.toJS(this.nodes),
+                edges: mobx.toJS(this.edges),
+            }
+        };
+    }
 }
-
-
-// const ydoc = getYjsDoc(syncStore);
-// export const webrtcProvider = new WebrtcProvider('room-rf', ydoc, {
-//     signaling: ['ws://localhost:4444'],
-//     // maxConns: 3,
-// }); 
-
-// export const    connect = () => webrtcProvider.connect();
-// export const disconnect = () => webrtcProvider.disconnect();

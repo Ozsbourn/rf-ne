@@ -92,23 +92,23 @@ class RFObjectsBuilder {
                 pumlType:    object.type_.name,
             },
 
-            parentNode: parent,
-            extent:     (parent) ? 'parent' : undefined,
+            parentNode:   parent,
+            extent:       (parent) ? 'parent' : undefined,
+            expandParent: (parent) ? true : false,
         };
     };
 
     _createEdge = (object: any, parent: any = null) => {
         return {
             id:     'e_' + object.from + '-' + object.to,
-            // type:   'defaultEdge',
             // type:   'smart',
-            // type:   'default',
             type:   'smoothstep',
             
             source: object.from,
             target: object.to,
             
             label:  (object.techn) ? (object.label + '\n' + object.techn) : object.label,
+            animated: true,
 
             markerEnd: {
                 type: MarkerType.Arrow,
@@ -132,7 +132,6 @@ class RFObjectsBuilder {
         return {
             id:   object.alias,
             type: 'C4Boundary',
-            // type: 'group',
             position: pos,
             data: {
                 label:    object.label,
@@ -140,7 +139,10 @@ class RFObjectsBuilder {
 
                 pumlType: object.type_.name,
             },
-            parentNode: parent,
+            parentNode:   parent,
+            extent:       (parent) ? 'parent' : undefined,
+            expandParent: (parent) ? true : false,
+
 
             className: 'light',
             style: { backgroundColor: 'rgba(120, 120, 120, 0.2)', width: 400, height: 200 },

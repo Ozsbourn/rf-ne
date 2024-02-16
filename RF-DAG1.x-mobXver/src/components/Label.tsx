@@ -1,7 +1,7 @@
 
 
 
-const Label = (props) => {
+const Label = (props: any) => {
     return (
         <span>
             {
