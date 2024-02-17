@@ -1,7 +1,7 @@
 import { 
        useCallback, 
        useState, 
-       useRef 
+       useRef,
 } from 'react';
 import ReactFlow, {
        ReactFlowProvider,
@@ -23,11 +23,12 @@ import { edgeTypes } from '../initialData/egdeTypes';
 import { CustomNodeConfig }        from '../nodeConfig';
 import { createNodeConfigPattern } from '../store/nodeConfigFactory';
 import Sidebar          from './Sidebar';
-import { Button, Flex } from 'antd';
+import { Button, Divider, Flex } from 'antd';
 import { nodeBuilder }  from '../libs/nodeBuilder';
 import { editStore }    from '../store/globalStore';
 import ModalWrapper     from './modalWrapper';
 import Adapter from '../pages/adapter';
+import dataExchanger from '../libs/dataExchanger';
 
 
 
@@ -66,7 +67,7 @@ const Wrapper = observer(( { store }: any ) => {
     /* D&D events handlers end */
 
 
-    /* JSON manipulators handlers */
+    /* JSON & Puml manipulators handlers */
     const saveToJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
@@ -87,7 +88,25 @@ const Wrapper = observer(( { store }: any ) => {
     const openJSON = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
     }
-    /* JSON manipulators handlers end */
+
+    const saveToPuml = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+
+        const tmp = JSON.stringify(store.getAdapterOutput(), null, 2);
+        const pumlScript = dataExchanger.toPuml(tmp);
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([pumlScript], {
+            type: 'text/plain'
+        }));
+        a.setAttribute('download', 'script.puml');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+    const openPuml = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+    };
+    /* JSON & Puml manipulators handlers end */
 
 
     const onDeleteNodeList = (nodes: Node[]) => {
@@ -95,9 +114,6 @@ const Wrapper = observer(( { store }: any ) => {
             store.deleteNode(node.id);
         });
     }
-
-
-    
 
 
 
@@ -161,9 +177,25 @@ const Wrapper = observer(( { store }: any ) => {
                         }}>
                             Open JSON
                         </Button>
+
+                        <Divider />
+
+                        <Button type='primary' onClick={saveToPuml} style={{
+                            width: '95%'
+                        }}>
+                            Save to PlantUML
+                        </Button>
+                        <Button type='primary' onClick={openPuml} style={{
+                            width: '95%'
+                        }}>
+                            Open PlantUML
+                        </Button>
                     </Flex>
 
-                    {/*<pre>
+                    {/*<pre style={{
+                        width: '100%',
+                        height: '100%',
+                    }} >
                         {
                             store.nodes.map(node => {
                                 return JSON.stringify(node, null, 2);

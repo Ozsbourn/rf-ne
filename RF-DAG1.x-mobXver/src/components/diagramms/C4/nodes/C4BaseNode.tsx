@@ -1,9 +1,13 @@
-import { useEffect, useState }  from 'react';
-import { Handle, NodeProps, NodeResizer, NodeToolbar, Position } from 'reactflow';
-import Label         from '../../../Label';
+import { useState }  from 'react';
+import { 
+    Handle, 
+    NodeProps, 
+    NodeResizer, 
+    NodeToolbar, 
+    Position }  from 'reactflow';
+import Label    from '../../../Label';
 
-// import { useEditStore } from  '../../../../store/editComponentsStore';
-import { editStore, store }           from '../../../../store/globalStore';
+import { editStore, store } from '../../../../store/globalStore';
 
 
 type C4NodeInfo = {
@@ -35,52 +39,21 @@ type C4NodeInfo = {
  * 
  */
 const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
-    const [mainLabel,   setMainLabel]   = useState(nodeProps.data.mainLabel);
-    const [description, setDescription] = useState(nodeProps.data.description);
-    const [sprite,      setSprite]      = useState(nodeProps.data.sprite);        
-    const [tags,        setTags]        = useState(nodeProps.data.tags);          
-    const [link,        setLink]        = useState(nodeProps.data.link);          
-    const [nodeType,    setNodeType]    = useState(nodeProps.data.nodeType);
-    const [baseShape,   setBaseShape]   = useState(nodeProps.data.baseShape);     
-
-    
     const [isMLShowInput, setIsMLShowInput] = useState(false);    // ML - main label
     const [isNTShowInput, setIsNTShowInput] = useState(false);    // NT - node type
     const [isDShowInput,  setIsDShowInput]  = useState(false);    //  D - description
 
-    // const { deleteNode, updateNodeData }     = useStore();
-    // const { setEditingNode } = useEditStore();
 
-
-    const changeMLabel = (e: { target: { value: string; }; }) => {
-        setMainLabel(e.target.value);
-        // onNodeLabelChange(e.target.value, id);
-    }
-    const changeNodeType = (e: { target: { value: string; }; }) => {
-        setNodeType(e.target.value);
-        // onNodeLabelChange(e.target.value, id);
-    }
-    const changeDescription = (e: { target: { value: string; }; }) => {
-        setDescription(e.target.value);
-        // onNodeLabelChange(e.target.value, id);
-    }
+    /**
+     * @way  In bodies of these funcs should use useRef instead setters(?)
+     */
+    const changeMLabel      = (e: { target: { value: string; }; }) => { /*setMainLabel(e.target.value);*/ }
+    const changeNodeType    = (e: { target: { value: string; }; }) => { /*setNodeType(e.target.value);*/ }
+    const changeDescription = (e: { target: { value: string; }; }) => { /*setDescription(e.target.value);*/ }
 
     const handleCopy   = () => {};
     const handleEdit   = () => { editStore.setEditingNode(nodeProps.id); };
     const handleDelete = () => { store.deleteNode(nodeProps.id); };
-
-    useEffect(() => {
-        store.updateNodeData(nodeProps.id, { 
-            ...nodeProps.data,
-            mainLabel:   mainLabel,
-            description: description,
-            sprite:      (sprite)    ? sprite    : undefined, 
-            tags:        (tags)      ? tags      : undefined, 
-            link:        (link)      ? link      : undefined, 
-            nodeType:    (nodeType)  ? nodeType  : undefined, 
-            baseShape:   (baseShape) ? baseShape : undefined, 
-        })
-    }, [mainLabel, description, sprite, tags, link, nodeType, baseShape]);
 
 
 
@@ -105,7 +78,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 
             <Label
                 className='c4-mainLabel'
-                value={mainLabel}
+                value={nodeProps.data.mainLabel}
                 handleChange={changeMLabel}
                 handleBlur={() => setIsMLShowInput(false)}
                 handleDoubleClick={() => setIsMLShowInput(true)}
@@ -116,7 +89,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 <span>[</span>
                 <Label
                     className='c4-nodeType'
-                    value={nodeType}
+                    value={nodeProps.data.nodeType}
                     handleChange={changeNodeType}
                     handleBlur={() => setIsNTShowInput(false)}
                     handleDoubleClick={() => setIsNTShowInput(true)}
@@ -127,7 +100,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             
             <Label
                 className='c4-description'
-                value={description}
+                value={nodeProps.data.description}
                 handleChange={changeDescription}
                 handleBlur={() => setIsDShowInput(false)}
                 handleDoubleClick={() => setIsDShowInput(true)}

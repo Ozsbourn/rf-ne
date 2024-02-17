@@ -96,7 +96,7 @@ export class SchemeStore {
             if (i.id === id) {
                 i.data = {...data};
             }
-        }
+        } 
     }
 
     
@@ -161,17 +161,6 @@ export class SchemeStore {
     }
 
 
-    _updateCollection = (nodes: Node[]) => {
-        return nodes.map(node => {
-            return {
-                ...node, 
-                data: {
-                    ...node.data,
-                }
-            }
-        });
-    }
-    /* Adapter actions */
     @action 
     setAdapterOutput = (jsonScheme: any) => {
         this.schemePumlMetaInfo = {...jsonScheme.meta};
@@ -180,9 +169,7 @@ export class SchemeStore {
                 edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, 
                                                                       jsonScheme.schemeData.edges);
 
-        this.nodes = this._updateCollection(layoutedNodes);
-        // this.nodes = JSON.parse(JSON.stringify(layoutedNodes));
-        // this.nodes = layoutedNodes;
+        this.nodes = structuredClone(layoutedNodes);
         this.edges = structuredClone(layoutedEdges);
     }
     getAdapterOutput = () => {
