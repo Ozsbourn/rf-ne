@@ -101,7 +101,8 @@ class RFObjectsBuilder {
         return {
             id:     'e_' + object.from + '-' + object.to,
             // type:   'smart',
-            type:   'smoothstep',
+            // type:   'smoothstep',
+            type:   'straight',
             
             source: object.from,
             target: object.to,

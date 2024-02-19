@@ -15,7 +15,7 @@ import {
 } from 'reactflow';
 
 import { CustomNodeConfig } from '../nodeConfig';
-import { layouter } from '../libs/nodeLayouter';
+import { layouter }         from '../libs/nodeLayouter';
 
 
 
@@ -49,10 +49,10 @@ export class SchemeStore {
     getNewId = () => {
         return `dndnode_${this.currId++}`;
     }
-
     getNewHandleId = () => {
         return `handleId_${this.currHandleId++}`;
     }
+
 
     setSchemePumlMetaInfo = (metaInfo: any) => {
         this.schemePumlMetaInfo = metaInfo;
@@ -60,16 +60,16 @@ export class SchemeStore {
     getSchemePumlMetaInfo = () => {
         return this.schemePumlMetaInfo;
     }
+    
 
-    getNode = (nodeId: string = '') => {
-        return this.nodes.filter((node) => node.id === nodeId);
-    };
-
-    @action
-    onNodesChange = (changes: NodeChange[]) => {
-        this.nodes = applyNodeChanges(changes, this.nodes);
-    }
-
+    /**
+     * Called on custom node label change.
+     * 
+     * @status !Unused!
+     *
+     * @param      {string}  changes  The changes
+     * @param      {string}  id       The identifier
+     */
     @action
     onNodeLabelChange = (changes: string, id: string) => {
         this.nodes.map(node => (
@@ -85,9 +85,17 @@ export class SchemeStore {
     }
 
     @action
+    onNodesChange = (changes: NodeChange[]) => {
+        this.nodes = applyNodeChanges(changes, this.nodes);
+    }
+    @action
     onEdgesChange = (changes: EdgeChange[]) => {
         this.edges = applyEdgeChanges(changes, this.edges);
     } 
+    @action
+    onConnect = (connection: Connection) => {
+        this.edges = addEdge(connection, this.edges);
+    }
 
 
     @action
@@ -100,11 +108,9 @@ export class SchemeStore {
     }
 
     
-    @action
-    onConnect = (connection: Connection) => {
-        this.edges = addEdge(connection, this.edges);
-    }
-
+    getNode = (nodeId: string = '') => {
+        return this.nodes.filter((node) => node.id === nodeId);
+    };
     @action
     appendNode = (node: Node) => {
         this.nodes = [...this.nodes, { 
@@ -112,7 +118,6 @@ export class SchemeStore {
             }
         ]
     }
-
     /*
      * Right order:
      *      1. delete any edges, where there is id deleted node as src or target
@@ -136,7 +141,6 @@ export class SchemeStore {
 
         return handles[0].handlers.length;
     }
-
     @action
     getHandlers = (id: string) => {
         const handles = this.handlers.filter((handler) => handler.id === id);
@@ -147,12 +151,10 @@ export class SchemeStore {
 
         return handles[0].handlers;
     }
-
     @action
     getAllHandles = () => {
         return this.handlers;
     }
-
     @action
     appendHandlers = (handleConfig: CustomNodeConfig) => {
         this.handlers = [...this.handlers, {

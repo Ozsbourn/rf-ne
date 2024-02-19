@@ -90,10 +90,11 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             className='C4BaseNode' 
             style={{
                 minWidth: 250, 
-                width: '100%', 
-                maxWidth: 'fit-content', 
                 minHeight: 150, 
-                height: '100%'
+                maxWidth: 350, 
+                maxHeight: 250,
+                width: '100%', 
+                height: '100%',
             }}
         >
             <NodeResizer 
@@ -101,6 +102,8 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 isVisible={nodeProps.selected} 
                 minWidth={250} 
                 minHeight={150}
+                maxWidth={350}
+                maxHeight={250}
             />
 
             <NodeToolbar 
