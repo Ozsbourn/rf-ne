@@ -85,7 +85,7 @@ const Wrapper = observer(( { store }: any ) => {
         a.click();
         document.body.removeChild(a);
     }
-    const openJSON = (event: { preventDefault: () => void; }) => {
+    const openJSON   = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
     }
 
@@ -103,7 +103,7 @@ const Wrapper = observer(( { store }: any ) => {
         a.click();
         document.body.removeChild(a);
     };
-    const openPuml = (event: { preventDefault: () => void; }) => {
+    const openPuml   = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
     };
     /* JSON & Puml manipulators handlers end */

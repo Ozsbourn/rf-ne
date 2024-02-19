@@ -1,21 +1,37 @@
-import { XYPosition } from "reactflow";
+import { Node, XYPosition } from "reactflow";
 
 
-
+/**
+ * Front-end builder for create nodes on dnd mode.
+ *
+ * @class      NodeBuilder (name)
+ * 
+ * @method     getNode (id, type, position) Return node for choosen type
+ */
 class NodeBuilder {
 	constructor() {}
 
 
-	getNode = (id: string, type: string, position: XYPosition) => {
+	/**
+	 * Gets the node.
+	 *
+	 * @param      {string}      id        The identifier
+	 * @param      {string}      type      The type of node
+	 * @param      {XYPosition}  position  The position of node
+	 * 
+	 * @return     {<type>}      The node.
+	 */
+	getNode = (id: string, type: string, position: XYPosition): Node | object => {
 		switch (type) {
 			case 'C4Node':
 				return this._makeC4Node(id, type, position);
+
 			default:
 				return this._makeInvalidNode();
 		}
 	};
 
-	_makeC4Node = (id: string, type: string, position: XYPosition) => {
+	_makeC4Node = (id: string, type: string, position: XYPosition): Node => {
 		return {
             id: id,
             type: type,
@@ -32,12 +48,12 @@ class NodeBuilder {
                 pumlType:    'Put here type of node',
             },
 
-            parentNode: null,
-            extent:     null,
+            parentNode: undefined,
+            extent:     undefined,
         };
 	};
 
-	_makeInvalidNode = () => { return {}; };
+	_makeInvalidNode = (): object => { return {}; };
 };
 
 export const nodeBuilder = new NodeBuilder();

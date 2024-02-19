@@ -11,7 +11,7 @@
  *		Enterprise_Boundary(alias, label, ?tags, ?link)
  *  ) - [Here boundary have unique order where type appear earlier than tags]
  * 
- * Additional info about possible macroses: https://github.com/plantuml-stdlib/C4-PlantUML
+ * Additional info about possible macroses see here: https://github.com/plantuml-stdlib/C4-PlantUML
  * 
  */
 export type Token = | 'Person'

@@ -11,6 +11,8 @@ export default [
       nodeType:    'Container',
       typeContent: 'React/Angular',
       description: 'This component describe some thing',
+    
+      PumlType: 'Container',
     },
     position: { x: 250, y: 250 },
   },
@@ -23,6 +25,8 @@ export default [
       nodeType:    'Component',
       typeContent: 'Supabase auth',
       description: 'This component serve auth logic',
+
+      PumlType: 'Component',
     },
     position: { x: 450, y: 350 },
   },
@@ -34,6 +38,8 @@ export default [
       nodeType:    'Component',
       typeContent: 'Software system',
       description: 'This external component send smth to th e-mail of users',
+    
+      PumlType: 'Component',
     },
     position: { x: 750, y: 355 },
   },
@@ -45,6 +51,8 @@ export default [
       nodeType:    'Container',
       typeContent: 'Oracle DB',
       description: 'Stores any data of service',
+    
+      PumlType: 'Container',
     },
     position: { x: 630, y: 555 },
   },

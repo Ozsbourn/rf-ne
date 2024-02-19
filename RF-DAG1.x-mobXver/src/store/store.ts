@@ -25,8 +25,8 @@ export class SchemeStore {
     // TODO: specify meta like a type
     schemePumlMetaInfo: any = {};
 
-    @observable nodes: Node[];
-    @observable edges: Edge[];
+    @observable.deep nodes: Node[];
+    @observable.deep edges: Edge[];
 
     @observable currHandleId: number;
     @observable handlers: CustomNodeConfig[];

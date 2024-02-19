@@ -2,5 +2,5 @@
 
 
 export const reqConfig = {
-    serverUrl:'http://localhost:5000',
+    serverUrl: 'http://localhost:5000',
 };

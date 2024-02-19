@@ -1,7 +1,16 @@
+import React from "react";
 
 
 
-const Label = (props: any) => {
+type Props = {
+    isShowInput:       boolean;
+    handleChange:      React.ChangeEventHandler<HTMLInputElement>;
+    handleBlur:        React.FocusEventHandler<HTMLInputElement>;
+    handleDoubleClick: React.MouseEventHandler<HTMLSpanElement>;
+    value:             string;  
+};
+
+const Label = (props: Props) => {
     return (
         <span>
             {

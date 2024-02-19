@@ -4,11 +4,11 @@ import dagre          from '@dagrejs/dagre';
 
 
 /**
- * This class describes a layouter.
+ * This class describes a layouter. In base: dagre layouting library.
  *
  * @class      Layouter (name)
  * 
- * @method     getLayoutedElements Return nodes and changed align on choosed direction
+ * @method     getLayoutedElements Return nodes and changed align on flow [default: TB (top-to-bottom)]
  * 
  */
 class Layouter {

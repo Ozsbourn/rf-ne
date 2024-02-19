@@ -1,5 +1,8 @@
-import { editStore, store } from './store/globalStore';
-import Wrapper   from './components/wrapper';
+import { 
+    editStore, 
+    store, 
+} from './store/globalStore';
+import Wrapper from './components/wrapper';
 
 
 

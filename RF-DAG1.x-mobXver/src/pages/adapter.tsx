@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 // For debug; Should be base staff for example or quick start later tho
 import contextExample          from "../initialData/context";
 
@@ -148,6 +148,10 @@ const Adapter = () => {
             console.log(err);
         });
     };
+
+    // useEffect(() => {
+    //     setInterval(updateCodeInEditor, 1000);
+    // }, []);
     
 
 
