@@ -100,11 +100,20 @@ export class SchemeStore {
 
     @action
     updateNodeData = (id: string, data: any) => {
-        for (let i of this.nodes) {
-            if (i.id === id) {
-                i.data = {...data};
-            }
-        } 
+        this.nodes = this.nodes.map(node => {
+            return (node.id === id) ? (
+                    node = {
+                        ...node,
+                        data: {
+                            ...node.data, // Destructuring here allow pass not full object as data 
+                                          // for update node data state
+                            ...data,
+                        }
+                    }
+                ) : (
+                    node
+                );
+        });
     }
 
     

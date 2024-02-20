@@ -1,3 +1,4 @@
+import { store } from "../store/globalStore";
 import { getToken } from "./tokenizer";
 
 
@@ -34,6 +35,9 @@ class DataExchanger {
         const rfScheme = JSON.parse(jsonScheme);
 
         let puml: string  = '@startuml';
+
+        puml += this._metadataToString();
+
         if (rfScheme.schemeData) {
         	if (rfScheme.schemeData.nodes) {
         		const nodesArr = rfScheme.schemeData.nodes; 
@@ -63,6 +67,28 @@ class DataExchanger {
         return rfScheme;
     };
 
+
+    _metadataToString = (): string => {
+        const metaObj = store.getSchemePumlMetaInfo();
+        let meta: string = '';
+
+        // if (metaObj.defs) {
+        //     for (let i in metaObj.defs) {
+        //         meta += i + '\n';
+        //     }   
+        // }
+
+        // meta += '\n';
+        // for (let i in metaObj.incs) {
+        //     meta += i + '\n';
+        // }
+
+        meta += '\n';
+        meta += (metaObj.legend) ? metaObj.legend + '\n\n'  : '';
+        meta += (metaObj.title)  ? `title ${metaObj.title}` : '';
+    
+        return meta;
+    };
 
     /**
      * Returns a string representation of collection of elements.

@@ -39,15 +39,6 @@ type C4NodeInfo = {
 };
 
 const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
-    const [ml,     setMl]     = useState(nodeProps.data.mainLabel);
-    const [nt,     setNt]     = useState(nodeProps.data.nodeType);
-    const [desc,   setDesc]   = useState(nodeProps.data.description);
-    const [sprite, setSprite] = useState(nodeProps.data.sprite);
-    const [tags,   setTags]   = useState(nodeProps.data.tags);
-    const [link,   setLink]   = useState(nodeProps.data.link);
-    const [type,   setType]   = useState(nodeProps.data.type);
-    const [bs,     setBs]     = useState(nodeProps.data.baseShape);
-
     const [isMLShowInput, setIsMLShowInput] = useState(false);    // ML - main label
     const [isNTShowInput, setIsNTShowInput] = useState(false);    // NT - node type
     const [isDShowInput,  setIsDShowInput]  = useState(false);    //  D - description
@@ -56,32 +47,6 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
     const handleCopy   = () => {};
     const handleEdit   = () => { editStore.setEditingNode(nodeProps.id); };
     const handleDelete = () => { store.deleteNode(nodeProps.id); };
-
-
-    useEffect(() => {
-        setMl(nodeProps.data.mainLabel);
-        setNt(nodeProps.data.nodeType);
-        setDesc(nodeProps.data.description);
-        setSprite(nodeProps.data.sprite);
-        setTags(nodeProps.data.tags);
-        setLink(nodeProps.data.link);
-        setType(nodeProps.data.type);
-        setBs(nodeProps.data.baseShape);
-    }, [nodeProps.data]);
-    useEffect(() => {
-        store.updateNodeData(nodeProps.id, { 
-            ...nodeProps.data,  
-
-            mainLabel:   ml,
-            nodeType:    nt,
-            description: desc,
-            sprite:      sprite, 
-            tags:        tags, 
-            link:        link, 
-            type:        type,  
-            baseShape:   bs,
-        }) 
-    }, [ml, nt, desc, sprite, tags, link, type, bs]);
 
 
 
@@ -118,8 +83,8 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 
             <Label
                 className='c4-mainLabel'
-                value={ml}
-                handleChange={e => setMl(e.target.value)}
+                value={nodeProps.data.mainLabel}
+                handleChange={e => store.updateNodeData(nodeProps.id, { mainLabel: e.target.value })}
                 handleBlur={() => setIsMLShowInput(false)}
                 handleDoubleClick={() => setIsMLShowInput(true)}
                 isShowInput={isMLShowInput}
@@ -129,8 +94,8 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 <span>[</span>
                 <Label
                     className='c4-nodeType'
-                    value={nt}
-                    handleChange={e => setNt(e.target.value)}
+                    value={nodeProps.data.nodeType}
+                    handleChange={e => store.updateNodeData(nodeProps.id, { nodeType: e.target.value })}
                     handleBlur={() => setIsNTShowInput(false)}
                     handleDoubleClick={() => setIsNTShowInput(true)}
                     isShowInput={isNTShowInput}
@@ -140,8 +105,8 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             
             <Label
                 className='c4-description'
-                value={desc}
-                handleChange={e => setDesc(e.target.value)}
+                value={nodeProps.data.description}
+                handleChange={e => store.updateNodeData(nodeProps.id, { description: e.target.value })}
                 handleBlur={() => setIsDShowInput(false)}
                 handleDoubleClick={() => setIsDShowInput(true)}
                 isShowInput={isDShowInput}

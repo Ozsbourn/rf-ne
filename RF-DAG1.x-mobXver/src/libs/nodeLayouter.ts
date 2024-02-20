@@ -24,7 +24,6 @@ class Layouter {
 		});
 		this._dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-		// TODO: getNodeBounds or smth like that for getting shape sizes
 		this._maxNodeWidth  = 350;
 		this._maxNodeHeight = 250;
 	}

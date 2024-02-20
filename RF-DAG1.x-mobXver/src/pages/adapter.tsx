@@ -149,10 +149,6 @@ const Adapter = () => {
         });
     };
 
-    // useEffect(() => {
-    //     setInterval(updateCodeInEditor, 1000);
-    // }, []);
-    
 
 
     return (

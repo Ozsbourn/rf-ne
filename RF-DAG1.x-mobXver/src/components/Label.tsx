@@ -3,11 +3,11 @@ import React from "react";
 
 
 type Props = {
-    isShowInput:       boolean;
-    handleChange:      React.ChangeEventHandler<HTMLInputElement>;
-    handleBlur:        React.FocusEventHandler<HTMLInputElement>;
-    handleDoubleClick: React.MouseEventHandler<HTMLSpanElement>;
-    value:             string;  
+    isShowInput?:       boolean;
+    handleChange?:      React.ChangeEventHandler<HTMLInputElement>;
+    handleBlur?:        React.FocusEventHandler<HTMLInputElement>;
+    handleDoubleClick?: React.MouseEventHandler<HTMLSpanElement>;
+    value:              string;  
 };
 
 const Label = (props: Props) => {
