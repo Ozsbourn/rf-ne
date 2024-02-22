@@ -22,7 +22,7 @@ class Layouter {
 	_maxNodeWidth:  number;
 	_maxNodeHeight: number;
 
-	_sizeMap: Map<string, ElementSize>;
+	// _sizeMap: Map<string, ElementSize>;
 
 	constructor () {
 		this._dagreGraph = new dagre.graphlib.Graph({
@@ -45,8 +45,6 @@ class Layouter {
 	// _initSizeMap = () => {
 	// 	let el = document.querySelector('.C4BaseNode'); 
 	// 	this._sizeMap.set('c4node', { width: el.offsetWidth, height: offsetHeight });
-
-	// 	console.log(this._sizeMap.get('node'))
 
 	// 	el = document.querySelector('.C4Boundary'); 
 	// 	this._sizeMap.set('c4boundary', { width: el.offsetWidth, height: offsetHeight });

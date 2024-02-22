@@ -38,7 +38,7 @@ class NodeBuilder {
             position: position,
             data: {
                 mainLabel:   'Put here node label',
-                description: 'Describe ur node here w/ any description',
+                description: 'Describe your node here with any description',
                 sprite:      undefined,
                 tags:        undefined,
                 link:        undefined,

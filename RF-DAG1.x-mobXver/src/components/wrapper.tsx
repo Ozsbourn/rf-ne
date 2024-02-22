@@ -13,6 +13,7 @@ import ReactFlow, {
        XYPosition,
        Node,
        MarkerType,
+       ReactFlowInstance,
 } from 'reactflow';
 
 
@@ -50,7 +51,7 @@ const defaultEdgeOptions = {
 
 const Wrapper = observer(( { store }: any ) => {
     const reactFlowWrapper = useRef(null);
-    const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
     const [showInitModal, setShowInitModal] = useState(true);
 
@@ -94,7 +95,6 @@ const Wrapper = observer(( { store }: any ) => {
             ...reactFlowInstance!.toObject(),
             handles
         }
-        console.log(rfJsonInstance)
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
             type: 'text/plain'

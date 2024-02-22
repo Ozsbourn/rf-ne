@@ -1,6 +1,4 @@
-import { MarkerType, XYPosition } from "reactflow";
-import { nodeTypes } from '../initialData/nodeTypes';
-import { edgeTypes } from '../initialData/egdeTypes';
+import { XYPosition } from "reactflow";
 
 
 

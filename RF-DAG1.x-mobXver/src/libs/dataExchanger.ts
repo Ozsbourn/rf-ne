@@ -57,7 +57,7 @@ class DataExchanger {
      * Parse data that get from server after parsing PlantUML and adapt it to
      *  form that convinient to ReactFlow component
      *
-     * @param      {any}     recievedData  The recieved data
+     * @param      {any}     _recievedData  The recieved data
      * 
      * @return     {object}  RF-based JS object to describe RF data
      */
@@ -72,16 +72,14 @@ class DataExchanger {
         const metaObj = store.getSchemePumlMetaInfo();
         let meta: string = '';
 
-        // if (metaObj.defs) {
-        //     for (let i in metaObj.defs) {
-        //         meta += i + '\n';
-        //     }   
-        // }
+        for (let i of metaObj.defs) {
+            meta += i + '\n';
+        }   
 
-        // meta += '\n';
-        // for (let i in metaObj.incs) {
-        //     meta += i + '\n';
-        // }
+        meta += '\n';
+        for (let i of metaObj.incs) {
+            meta += i + '\n';
+        }
 
         meta += '\n';
         meta += (metaObj.legend) ? metaObj.legend + '\n\n'  : '';
