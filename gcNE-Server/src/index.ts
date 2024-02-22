@@ -12,7 +12,7 @@ const port = 5000;
 app.use(express.json())                         // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use(function(req, res, next) {
+app.use(function(_req, res, next) {
   res.header(headerTypes.acaOrigin,      headerValues.acaOrigin); 
   res.header(headerTypes.acaHeaders,     headerValues.acaHeaders); 
   res.header(headerTypes.acaMethods,     headerValues.acaMethods); 
@@ -24,6 +24,7 @@ app.use(function(req, res, next) {
 
 app.post('/', async (req, res) => {  
   const pumlCode = plantumlDecoder.decode(req.body.pumlEncoded);
+
   res.send(parsePuml(pumlCode));
 });
 

@@ -10,7 +10,7 @@ export const headerTypes = {
 
 export const headerValues = {
   /* aca - Access-Control-Allow-[...] */
-  acaOrigin:      'http://localhost:5173', // Allowed url here
+  acaOrigin:      'http://localhost:5173', 
   acaHeaders:     'Origin, X-Requested-With, Content-Type, Accept',
   acaMethods:     'GET, POST, DELETE, PUT',
   acaCredentials: 'true',
