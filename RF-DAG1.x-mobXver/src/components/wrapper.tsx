@@ -2,7 +2,6 @@ import {
     useCallback, 
     useState, 
     useRef,
-    useEffect,
 } from 'react';
 import ReactFlow, {
        ReactFlowProvider,
@@ -12,9 +11,10 @@ import ReactFlow, {
        ConnectionMode,
        BackgroundVariant,
        XYPosition,
-       Node
+       Node,
+       MarkerType,
 } from 'reactflow';
-import 'reactflow/dist/style.css';
+
 
 import { observer }  from 'mobx-react-lite';
 
@@ -24,18 +24,35 @@ import { edgeTypes } from '../initialData/egdeTypes';
 import { CustomNodeConfig }        from '../nodeConfig';
 import { createNodeConfigPattern } from '../store/nodeConfigFactory';
 import Sidebar          from './Sidebar';
-import { Button, Divider, Flex } from 'antd';
+import { Button, Divider, Flex, Modal } from 'antd';
 import { nodeBuilder }  from '../libs/nodeBuilder';
 import { editStore }    from '../store/globalStore';
 import ModalWrapper     from './modalWrapper';
 import Adapter from '../pages/adapter';
 import dataExchanger from '../libs/dataExchanger';
+import CustomConnectionLine from './defaultEdges/connectionLine';
 
+
+
+const connectionLineStyle = {
+    strokeWidth: 2,
+    stroke: 'black',
+};
+const defaultEdgeOptions = {
+  style: { strokeWidth: 2, stroke: 'gray' },
+  type: 'floating',
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    color: 'gray',
+  },
+};
 
 
 const Wrapper = observer(( { store }: any ) => {
     const reactFlowWrapper = useRef(null);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
+    const [showInitModal, setShowInitModal] = useState(true);
 
 
     /* D&D events handlers */
@@ -77,6 +94,7 @@ const Wrapper = observer(( { store }: any ) => {
             ...reactFlowInstance!.toObject(),
             handles
         }
+        console.log(rfJsonInstance)
         const a = document.createElement('a');
         a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
             type: 'text/plain'
@@ -133,12 +151,15 @@ const Wrapper = observer(( { store }: any ) => {
                         onConnect={store.onConnect}
                         nodeTypes={nodeTypes}
                         edgeTypes={edgeTypes}
+                        defaultEdgeOptions={defaultEdgeOptions}
 
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
                         onDragOver={onDragOver}
 
                         connectionMode={ConnectionMode.Loose}
+                        connectionLineComponent={CustomConnectionLine}
+                        connectionLineStyle={connectionLineStyle} 
 
                         fitView
                         deleteKeyCode={'Delete'}
@@ -162,6 +183,7 @@ const Wrapper = observer(( { store }: any ) => {
                 }}>
                     <Sidebar />
 
+                    <Divider />
                     
                     <Flex align='center' vertical={true} style={{
                         width: '100%',
@@ -179,8 +201,6 @@ const Wrapper = observer(( { store }: any ) => {
                             Open JSON
                         </Button>
 
-                        <Divider />
-
                         <Button type='primary' onClick={saveToPuml} style={{
                             width: '95%'
                         }}>
@@ -191,24 +211,35 @@ const Wrapper = observer(( { store }: any ) => {
                         }}>
                             Open PlantUML
                         </Button>
-                    </Flex>
 
-                    {/*<pre style={{
-                        width: '100%',
-                        height: '100%',
-                    }} >
-                        {
-                            store.nodes.map(node => {
-                                return JSON.stringify(node, null, 2);
-                            })
-                        }
-                    </pre>*/}
+                        <Divider/>
+
+                        <Button type='primary' onClick={store.disableEdgeAnimations} style={{
+                            width: '95%'
+                        }}>
+                            {(store.getAnimationStatus()) ? 'Disable edges animation' : 'Enable edges animation'}
+                        </Button>
+                    </Flex>
                 </div>
 
                 <ModalWrapper 
                     store={editStore} 
                     title='Edit component' 
                 />
+
+                <Modal
+                    title='Комментарии'
+                    open={showInitModal}
+                    onOk={() => setShowInitModal(false)}
+                    onCancel={() => setShowInitModal(false)}
+                >
+                    <p>В левой части расположен редактор кода и кнопки: для применения изменений с текстового редактора в нодовый, и наоборот, соответственно. <br/>В правой: элементы управления для работы с файлами и базовая нода для D&D режима работы редактора.<br/>Для MVP ограничен набор нод до С4 (все С4 сущности выводятся из базовой) - просто редактируйте поля двойным кликом.</p>
+                    <br/>
+
+                    <p>EPs: На данный момент возможно несовпадение порядка элементов в PlantUML скриптах, которые формирует пользователь и генерирует сервис, поэтому изменения могут приводить к переопределению порядка команд.</p>
+                    <p>EPs: На данный момент есть некорректная работа с группами, при лэйаутинге элементов на схеме, поэтому любые макросы формирования групп (Boundary и т.п.) игнорируются.</p>
+                    <p>Подсветка синтаксиса и определение ошибок пока также отключены. Возможны баги :)</p>
+                </Modal>
             </ReactFlowProvider>
         </div>
     );

@@ -36,7 +36,7 @@ export default () => {
                 </div>  */}
 
                 <Button type='primary' onDragStart={(event) => onDragStart(event, 'C4Node')} draggable style={{
-                    width: '95%'
+                    width: '100%',
                 }}>
                     C4 Node     
                 </Button>     

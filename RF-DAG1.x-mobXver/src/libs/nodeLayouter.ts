@@ -3,6 +3,11 @@ import dagre          from '@dagrejs/dagre';
 
 
 
+type ElementSize = {
+	width?:  number;
+	height?: number;
+};
+
 /**
  * This class describes a layouter. In base: dagre layouting library.
  *
@@ -17,6 +22,8 @@ class Layouter {
 	_maxNodeWidth:  number;
 	_maxNodeHeight: number;
 
+	_sizeMap: Map<string, ElementSize>;
+
 	constructor () {
 		this._dagreGraph = new dagre.graphlib.Graph({
 			compound:   true,
@@ -26,7 +33,24 @@ class Layouter {
 
 		this._maxNodeWidth  = 350;
 		this._maxNodeHeight = 250;
+
+		// this._sizeMap = new Map<string, ElementSize>([
+		// 	['invalid', { width: 0, height: 0 }],
+		// ]);
+		// this._initSizeMap();
 	}
+
+
+
+	// _initSizeMap = () => {
+	// 	let el = document.querySelector('.C4BaseNode'); 
+	// 	this._sizeMap.set('c4node', { width: el.offsetWidth, height: offsetHeight });
+
+	// 	console.log(this._sizeMap.get('node'))
+
+	// 	el = document.querySelector('.C4Boundary'); 
+	// 	this._sizeMap.set('c4boundary', { width: el.offsetWidth, height: offsetHeight });
+	// };
 
 
 	/**
@@ -89,5 +113,22 @@ class Layouter {
 
 		return { nodes, edges };
 	};
+
+
+	/**
+	 * Gets the size of an element.
+	 *
+	 * @param      {string}  elementType  The element type
+	 * @return     {Object}  The size.
+	 */
+	// getSize = (elementType: string): object => {
+	// 	let sizes: Required<ElementSize> = this._sizeMap.get(elementType);
+
+	// 	if (!sizes) {
+	// 		sizes = this._sizeMap.get('invalid');
+	// 	}
+
+	// 	return { width: sizes.width, height: sizes.height };
+	// };
 };
 export const layouter = new Layouter();

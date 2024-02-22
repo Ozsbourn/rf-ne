@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { NodeResizer } from "reactflow";
 
 
@@ -49,4 +49,4 @@ const C4Boundary = (nodeProps: any) => {
     );
 };
 
-export default C4Boundary;
+export default memo(C4Boundary);

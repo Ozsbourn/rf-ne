@@ -25,11 +25,15 @@ export class SchemeStore {
     // TODO: specify meta like a type
     schemePumlMetaInfo: any = {};
 
-    @observable.deep nodes: Node[];
-    @observable.deep edges: Edge[];
+    @observable.shallow nodes: Node[];
+    @observable.shallow edges: Edge[];
+    // @observable.deep nodes: Node[];
+    // @observable.deep edges: Edge[];
 
     @observable currHandleId: number;
     @observable handlers: CustomNodeConfig[];
+
+    @observable isAnimated: boolean;
 
     constructor(nodes: Node[], edges: Edge[]) {
         mobx.makeObservable(this);
@@ -38,6 +42,7 @@ export class SchemeStore {
 
         this.nodes = nodes;
         this.edges = edges;
+        this.isAnimated = true;
 
         this.currHandleId = 0;
         this.handlers     = [];
@@ -52,6 +57,17 @@ export class SchemeStore {
     getNewHandleId = () => {
         return `handleId_${this.currHandleId++}`;
     }
+
+    getAnimationStatus = () => {
+        return this.isAnimated;
+    };
+    @action
+    disableEdgeAnimations = () => {
+        this.isAnimated = !this.isAnimated;
+        this.edges = this.edges.map((edge: Edge) => {
+            return { ...edge, animated: this.isAnimated };
+        });
+    };
 
 
     setSchemePumlMetaInfo = (metaInfo: any) => {
@@ -94,7 +110,8 @@ export class SchemeStore {
     } 
     @action
     onConnect = (connection: Connection) => {
-        this.edges = addEdge(connection, this.edges);
+        const newEdge: Edge = { ...connection, type: 'floating', label: 'put label here', animated: true, }
+        this.edges = addEdge(newEdge, this.edges);
     }
 
 
@@ -117,8 +134,9 @@ export class SchemeStore {
     }
 
     
-    getNode = (nodeId: string = '') => {
-        return this.nodes.filter((node) => node.id === nodeId);
+    getNode = (nodeId: string) => {
+        const node = mobx.toJS(this.nodes.filter((node) => node.id === nodeId)[0]);
+        return node;
     };
     @action
     appendNode = (node: Node) => {
@@ -136,9 +154,10 @@ export class SchemeStore {
     @action
     deleteNode = (id: string) => {
         this.edges    = this.edges.filter(edge => (edge.source !== id && edge.target !== id));
-        this.handlers = this.handlers.filter(handle => handle.id !== id);
+        this.handlers = this.handlers.filter(handle => { if (handle) { handle.id !== id }});
         this.nodes    = this.nodes.filter(node => node.id !== id);
     }
+
 
     @action
     getHandlersCount = (id: string) => {
@@ -179,6 +198,17 @@ export class SchemeStore {
         const { nodes: layoutedNodes, 
                 edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, 
                                                                       jsonScheme.schemeData.edges);
+
+        // TODO: singleton mapper for sizes?
+        // const sizes = layouter.getSize('node');
+        
+        const sizes = document.querySelector('.C4BaseNode')
+        layoutedNodes.map((node: Node) => {
+            // node.width  = sizes.width;
+            // node.height = sizes.height; 
+            node.width  = sizes.offsetWidth;
+            node.height = sizes.offsetHeight; 
+        });
 
         this.nodes = structuredClone(layoutedNodes);
         this.edges = structuredClone(layoutedEdges);

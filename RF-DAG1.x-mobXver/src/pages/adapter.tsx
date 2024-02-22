@@ -86,31 +86,35 @@ const adaptResponsedDataToRFScheme = (responsedData: any) => {
                 }
             }
         } else if (newElement.type === 'Boundary') {
-            scheme = {
-                ...scheme,
-                schemeData: {
-                    ...scheme.schemeData,
-                    nodes: [
-                        ...scheme.schemeData.nodes,
-                        newElement.object,
-                    ],
-                }
-            }
+            /**
+             * @status remove for MVp, cuz there is problem w/ layouting sub flows
+             */
 
-            for (let nestedNode of element.elements) {
-                const childNode: BuilderResponse = rfBuilder.getRfObject(nestedNode, newElement.object.id);
+            // scheme = {
+            //     ...scheme,
+            //     schemeData: {
+            //         ...scheme.schemeData,
+            //         nodes: [
+            //             ...scheme.schemeData.nodes,
+            //             newElement.object,
+            //         ],
+            //     }
+            // }
+
+            // for (let nestedNode of element.elements) {
+            //     const childNode: BuilderResponse = rfBuilder.getRfObject(nestedNode, newElement.object.id);
              
-                scheme = {
-                    ...scheme,
-                    schemeData: {
-                        ...scheme.schemeData,
-                        nodes: [
-                            ...scheme.schemeData.nodes,
-                            childNode.object,
-                        ],
-                    }
-                }
-            }
+            //     scheme = {
+            //         ...scheme,
+            //         schemeData: {
+            //             ...scheme.schemeData,
+            //             nodes: [
+            //                 ...scheme.schemeData.nodes,
+            //                 childNode.object,
+            //             ],
+            //         }
+            //     }
+            // }
         } else {
             // Ignore an empty object, if current ver. of service isn't support this command
             continue;

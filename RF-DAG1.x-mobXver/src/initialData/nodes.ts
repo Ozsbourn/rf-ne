@@ -4,6 +4,17 @@ import { Node } from 'reactflow';
 
 export default [
   {
+    id: '10',
+    type: 'custom',
+    position: { x: 0, y: 0 },
+  },
+  {
+    id: '12',
+    type: 'custom',
+    position: { x: 250, y: 320 },
+  },
+
+  {
     id: '1',
     type: 'C4Node',
     data: {

@@ -45,14 +45,8 @@ const ModalWrapper = observer(({store, title}: any) => {
 			onOk={handleOk} 
 			onCancel={handleCancel}
 		>
-			{/*{ 
-				(currNode !== null) ? 
-					(<>
-						<Input placeholder="Write label of node here" value={currNode.data.mainLabel} />
-					</>) 
-				: 
-					(<></>) 
-			}*/}
+			<p>Здесь пока ничего нет, потому что предполагаем, что для ознакомления с сервисом Вам не понадобится настройка нод гибче, чем с помощью двойных кликов соответствующим полям на самих нодах.</p>
+			{/* TODO: edit fields for deep edit of nodes (edges too?) */}
 		</Modal>
 	);	
 });

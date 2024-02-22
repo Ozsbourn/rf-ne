@@ -1,4 +1,4 @@
-import { useEffect, useState }  from 'react';
+import { memo, useState }  from 'react';
 import { 
     Handle, 
     NodeProps, 
@@ -73,8 +73,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 
             <NodeToolbar 
                 className='controlsNodePanel' 
-                isVisible={nodeProps.toolbarVisible}
-                position={nodeProps.toolbarPosition}
+                position={Position.Top}
             >
                 <button onClick={handleCopy}>Copy</button>
                 <button onClick={handleEdit}>Edit</button>
@@ -95,7 +94,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 <Label
                     className='c4-nodeType'
                     value={nodeProps.data.nodeType}
-                    handleChange={e => store.updateNodeData(nodeProps.id, { nodeType: e.target.value })}
+                    handleChange={e => store.updateNodeData(nodeProps.id, { nodeType: e.target.value, pumlType: e.target.value })}
                     handleBlur={() => setIsNTShowInput(false)}
                     handleDoubleClick={() => setIsNTShowInput(true)}
                     isShowInput={isNTShowInput}
@@ -115,17 +114,17 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
 
 
             {/* For test only - straight way */}
-            <Handle 
+            {/*<Handle 
                 id={'1'}
-                type='target'
+                type='source'
                 position={Position.Left}
-            />
+            />*/}
             <Handle 
                 id={'2'}
-                type='target' 
+                type='source' 
                 position={Position.Top}
             />
-            <Handle 
+            {/*<Handle 
                 id={'3'}
                 type='source' 
                 position={Position.Bottom}
@@ -134,10 +133,10 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 id={'4'}
                 type='source' 
                 position={Position.Right}
-            />
+            />*/}
             {/* For test only - straight way */}
         </div>
     );
 };
 
-export default C4BaseNode;
+export default memo(C4BaseNode);

@@ -1,4 +1,6 @@
 import { MarkerType, XYPosition } from "reactflow";
+import { nodeTypes } from '../initialData/nodeTypes';
+import { edgeTypes } from '../initialData/egdeTypes';
 
 
 
@@ -67,7 +69,8 @@ class RFObjectsBuilder {
                 this.lastError = { type: 'Error', message: `Couldn't create an object from PlantUML! Doesn't support part of commands now, or check a code for an errors!` };
 
                 // Debug
-                console.log(`Invalid object build from puml: ${object}`);
+                console.log(`Invalid object build from puml: ${object}`); // TODO: maybe unused cuz parser dont throw 
+                                                                          //   errors on parsing, it just ignore them 
                 return this.response;
         }
     };    
@@ -100,19 +103,13 @@ class RFObjectsBuilder {
     _createEdge = (object: any, parent: any = null) => {
         return {
             id:     'e_' + object.from + '-' + object.to,
-            // type:   'smart',
-            // type:   'smoothstep',
-            type:   'straight',
+            type: 'floating',
             
             source: object.from,
             target: object.to,
             
             label:  (object.techn) ? (object.label + '\n' + object.techn) : object.label,
             animated: true,
-
-            markerEnd: {
-                type: MarkerType.Arrow,
-            },
 
             data: {
                 parentNode: parent,
