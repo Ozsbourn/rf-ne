@@ -1,5 +1,4 @@
-import { memo, useEffect, useState } from "react";
-// For debug; Should be base staff for example or quick start later tho
+import { memo, useState } from "react";
 import contextExample          from "../initialData/context";
 
 import CodeMirror, { basicSetup } from "@uiw/react-codemirror";
@@ -157,37 +156,44 @@ const Adapter = () => {
 
     return (
         <div style={{
-            height: '100%',
+            height: '88%',
+            maxHeight: '88%',
+            overflow: 'none',
+            display: 'flex',
+            justifyContent: 'start',
+            position: 'relative',
         }}>
-            <CodeMirror
-                style={{
-                    width:     '400px',
-                    minHeight: '85%',
-                    maxHeight: '89%',
-                    overflow:  'auto',
-                    overflowY: 'scroll',
-                }}
-
-                height='auto'
-                value={code}
-                onChange={(value: string) => {
-                    setCode(value);
-                }}
-                extensions={
-                    [    
-                        basicSetup({
-                            foldGutter: false,
-                            dropCursor: false,
-                            allowMultipleSelections: false,
-                            indentOnInput: false,
-
-                            tabSize: 2
-                        })
-                    ]
-                }
-            />
-
             <Flex vertical={true} gap={5}>
+                <CodeMirror
+                    style={{
+                        position: 'relative',
+                        width:     '400px',
+                        minHeight: '100%',
+                        maxHeight: '100%',
+                        overflow:  'auto',
+                        overflowY: 'scroll',
+                    }}
+
+                    height='auto'
+                    value={code}
+                    onChange={(value: string) => {
+                        setCode(value);
+                    }}
+                    extensions={
+                        [    
+                            basicSetup({
+                                foldGutter: false,
+                                dropCursor: false,
+                                allowMultipleSelections: false,
+                                indentOnInput: false,
+
+                                tabSize: 2
+                            })
+                        ]
+                    }
+                />
+
+            {/*<Flex vertical={true} gap={5}>*/}
                 <Button
                     type="primary"
                     onClick={sendToServer}

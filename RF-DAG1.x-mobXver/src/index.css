@@ -132,6 +132,9 @@ body,
   flex-direction: column;
 
   font-size: 100%;
+
+  overflow-x: clip;
+  overflow-y: clip;
 }
 
 .с4-nodeType  .c4-typeContent {

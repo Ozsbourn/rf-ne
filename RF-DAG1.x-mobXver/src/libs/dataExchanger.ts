@@ -72,13 +72,17 @@ class DataExchanger {
         const metaObj = store.getSchemePumlMetaInfo();
         let meta: string = '';
 
-        for (let i of metaObj.defs) {
-            meta += i + '\n';
-        }   
+        if (metaObj.defs) {
+            for (let i of metaObj.defs) {
+                meta += i + '\n';
+            }
+        }
 
-        meta += '\n';
-        for (let i of metaObj.incs) {
-            meta += i + '\n';
+        if (metaObj.incs) {
+            meta += '\n';
+            for (let i of metaObj.incs) {
+                meta += i + '\n';
+            }
         }
 
         meta += '\n';
@@ -125,7 +129,19 @@ class DataExchanger {
 	    		str += (i.data.type)        ? `, $type=\"${i.data.type}\"`     : '';
 	    		str += (i.data.baseShape)   ? `, ${i.data.baseShape}`          : '';
 	    		str += ')';
-    		} else if (tokenHandler === 'Boundary') {
+    		} else if (tokenHandler === 'Container' || 
+                       tokenHandler === 'Component') {
+                // str += `\n${tab}/' Pos ${i.position.x} ${i.position.y} '/\n`;
+                str += `\n${tab}${i.data.pumlType}(${i.id}, \"${i.data.mainLabel}\"`;
+                str += (i.data.techn)       ? `, \"${i.data.techn}\"`          : '';
+                str += (i.data.description) ? `, \"${i.data.description}\"`    : '';
+                str += (i.data.sprite)      ? `, $sprite=\"${i.data.sprite}\"` : '';
+                str += (i.data.tags)        ? `, $tags=\"${i.data.tags}\"`     : '';
+                str += (i.data.link)        ? `, $link=\"${i.data.link}\"`     : '';
+                str += (i.data.type)        ? `, $type=\"${i.data.type}\"`     : '';
+                str += (i.data.baseShape)   ? `, ${i.data.baseShape}`          : '';
+                str += ')';
+            } else if (tokenHandler === 'Boundary') {
     			// str += `\n/' Pos ${i.position.x} ${i.position.y} '/\n`;
     			str += `\n${i.data.pumlType}(${i.id}, \"${i.data.label}\"`;
 	    		str += (i.data.type) ? `, $type=\"${i.data.type}\"` : '';
@@ -135,7 +151,8 @@ class DataExchanger {
 
 	    		currParent = i.id; inBlock = true; tab = '\t';
     		} else if (tokenHandler === 'Rel') {
-    			str += `\n${tab}${i.data.pumlType}(${i.source}, ${i.target}, \"${i.label}\"`;
+                const label = (i.label) ? i.label : '';
+    			str += `\n${tab}${i.data.pumlType}(${i.source}, ${i.target}, \"${label}\"`;
     			str += (i.data.techn)  ? `, \"${i.data.techn}\"`          : '';
     			str += (i.data.descr)  ? `, \"${i.data.descr}\"`          : '';
     			str += (i.data.sprite) ? `, $sprite=\"${i.data.sprite}\"` : '';

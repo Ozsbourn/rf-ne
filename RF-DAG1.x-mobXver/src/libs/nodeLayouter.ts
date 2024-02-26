@@ -64,9 +64,9 @@ class Layouter {
 		const isHorizontal = direction === 'LR';
 		this._dagreGraph.setGraph({
 			rankdir: direction,
-			nodesep: 15,
+			nodesep: 10,
 			edgesep: 10,
-			ranksep: 35,
+			ranksep: 15,
 		});
 
 		nodes.forEach((node) => {

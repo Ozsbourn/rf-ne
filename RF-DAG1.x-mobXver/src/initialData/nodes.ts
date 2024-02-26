@@ -4,26 +4,15 @@ import { Node } from 'reactflow';
 
 export default [
   {
-    id: '10',
-    type: 'custom',
-    position: { x: 0, y: 0 },
-  },
-  {
-    id: '12',
-    type: 'custom',
-    position: { x: 250, y: 320 },
-  },
-
-  {
     id: '1',
     type: 'C4Node',
     data: {
-      mainLabel:   'Web-application Page',
-      nodeType:    'Container',
+      mainLabel:   'User',
+      nodeType:    'Person',
       typeContent: 'React/Angular',
-      description: 'This component describe some thing',
+      description: 'User of some service, that described by this scheme',
     
-      PumlType: 'Container',
+      pumlType: 'Person',
     },
     position: { x: 250, y: 250 },
   },
@@ -32,12 +21,12 @@ export default [
     id: '2',
     type: 'C4Node',
     data: {
-      mainLabel:   'Sign-In Controller',
-      nodeType:    'Component',
+      mainLabel:   'Auth system',
+      nodeType:    'System',
       typeContent: 'Supabase auth',
-      description: 'This component serve auth logic',
+      description: 'This system serve authorization logic',
 
-      PumlType: 'Component',
+      pumlType: 'System',
     },
     position: { x: 450, y: 350 },
   },
@@ -46,11 +35,11 @@ export default [
     type: 'C4Node',
     data: {
       mainLabel:   'E-mail system',
-      nodeType:    'Component',
+      nodeType:    'System',
       typeContent: 'Software system',
-      description: 'This external component send smth to th e-mail of users',
+      description: 'This external component send smth to the e-mail of users',
     
-      PumlType: 'Component',
+      pumlType: 'System',
     },
     position: { x: 750, y: 355 },
   },
@@ -58,12 +47,12 @@ export default [
     id: '4',
     type: 'C4Node',
     data: {
-      mainLabel:   'Database for service logic',
-      nodeType:    'Container',
+      mainLabel:   'Cache System',
+      nodeType:    'System',
       typeContent: 'Oracle DB',
-      description: 'Stores any data of service',
+      description: 'Stores working cache that needed for service',
     
-      PumlType: 'Container',
+      pumlType: 'System',
     },
     position: { x: 630, y: 555 },
   },

@@ -1,7 +1,19 @@
 
 
 
-const contextExample: string = `@startuml
+const contextExample: string = `/'
+This code example isn't same for init 
+data's in canvas. That's difference needed to 
+give you two ways for test this draft: 
+  1. start with wysiwyg editor
+  2. start with puml editor
+
+Service may ignore some data for non context diagrams rn, 
+that's existed possible bug of all-in-one version of node
+'/
+
+
+@startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 LAYOUT_WITH_LEGEND()
@@ -16,37 +28,14 @@ Person(admin, "Администратор", "Управляет пользова
 
 System(sys, "Система Поколение-М", "Предоставляет образовательные программы и курсы для детей и подростков")
 
-Boundary(v1, "v1") {
-    System_Ext(legacy, "Старая система Поколение-М", "Информационный портал с неструктурированными материалами")
-    System_Ext(emailsys, "Система отправки эл.почты", "Коммунальный сервер МТС для рассылок электронной почты")
-    System_Ext(webinar, "Webinar", "Система проведения онлайн мероприятий (встреч, уроков, конференций и тп)")
-    System_Ext(mtsa, "МТС Аналитика", "Система веб-, мобильной-, рекламной аналитики")
-    System_Ext(mtsid, "МТС ID", "Система идентификации пользователей")
-    System_Ext(mtscloudcdn, "MTSCloud CDN", "Система дистрибьюции контента")
-}
+Person(testPerson, "Test Person", "Test description (Not sure that person can be linked w/ other Person in Puml)")
 
 Rel(guest, sys, "Просматривает доступные курсы, регистрируется в")
 Rel(student, sys, "Проходит обучение по курсам, сдает дом.работы, оценивает курс в")
 Rel(teacher, sys, "Проводит трансляции, проверяет домашние работы или задания по конкурсам в")
 Rel(support, sys, "Управляет учетными записями пользователей, назначением курсов, формированием образовательной программы в")
 Rel(admin, sys, "Управляет правами, создает курсы/уроки в")
-Rel(sys, legacy, "Загружает учебные материалы из")
-Rel(sys, emailsys, "Рассылает уведомления используя")
-Rel(sys, webinar, "Создает онлайн-трансляции: воркшопы, семинары используя")
-Rel(sys, mtsa, "Журналирует события пользователей на сайте в")
-Rel(sys, mtsid, "Аутентифицирует пользователей в")
-Rel(sys, mtscloudcdn, "Загружает (cdn push) видео-контент в")
-Rel(mtscloudcdn, sys, "Загружает (cdn pull) медиа-контент из")
-
-Boundary(v2, "v2") {
-    System_Ext(wasd, "WASD", "Стриминговая платформа МТС")
-    System_Ext(univer, "Корпоративный университет МТС", "Внутренняя система для обучения сотрудников")
-    System_Ext(enaplat, "Enablement Platform", "Платформа, обеспечивающая возможности оплаты услуг")
-}
-
-Rel(sys, wasd, "Создает онлайн-трансляции: воркшопы, семинары используя; загружает видео-контент из")
-Rel(univer, sys, "Загружает учебные материали из")
-Rel(sys, enaplat, "Использует кэшбек абонента МТС")
+Rel(testPerson, admin, "Set label in Puml editor")
 
 @enduml`;
 

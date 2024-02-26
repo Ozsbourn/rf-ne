@@ -33,6 +33,20 @@ const _tokenMapper = new Map([
 	['SystemDb_Ext',    'System'],
 	['SystemQueue_Ext', 'System'],
 
+	['Container',          'Container'],
+	['ContainerDb',        'Container'],
+	['ContainerQueue',     'Container'],
+	['Container_Ext',      'Container'],
+	['ContainerDb_Ext',    'Container'],
+	['ContainerQueue_Ext', 'Container'],
+
+	['Component',          'Component'],
+	['ComponentDb',        'Component'],
+	['ComponentQueue',     'Component'],
+	['Component_Ext',      'Component'],
+	['ComponentDb_Ext',    'Component'],
+	['ComponentQueue_Ext', 'Component'],
+
 	['Boundary',            'Boundary'],
 	['Enterprise_Boundary', 'Boundary'],
 	['System_Boundary',     'Boundary'],

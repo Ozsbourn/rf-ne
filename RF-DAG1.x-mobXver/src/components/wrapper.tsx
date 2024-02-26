@@ -53,7 +53,7 @@ const Wrapper = observer(( { store }: any ) => {
     const reactFlowWrapper = useRef(null);
     const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
-    const [showInitModal, setShowInitModal] = useState(true);
+    const [showInitModal, setShowInitModal] = useState(false);
 
 
     /* D&D events handlers */
@@ -139,7 +139,9 @@ const Wrapper = observer(( { store }: any ) => {
     return (
         <div className='dndflow'>
             <ReactFlowProvider>
-                <Adapter />
+                <div style={{height: '100%'}}>
+                    <Adapter />
+                </div>
 
                 <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                     <ReactFlow
@@ -187,7 +189,7 @@ const Wrapper = observer(( { store }: any ) => {
                     
                     <Flex align='center' vertical={true} style={{
                         width: '100%',
-                        height: '85%',
+                        height: '75%',
                         gap: 5
                     }}>
                         <Button type='primary' onClick={saveToJSON} style={{
@@ -195,22 +197,22 @@ const Wrapper = observer(( { store }: any ) => {
                         }}>
                             Save to JSON
                         </Button>
-                        <Button type='primary' onClick={openJSON} style={{
+                        {/*<Button type='primary' onClick={openJSON} style={{
                             width: '95%'
                         }}>
                             Open JSON
-                        </Button>
+                        </Button>*/}
 
                         <Button type='primary' onClick={saveToPuml} style={{
                             width: '95%'
                         }}>
                             Save to PlantUML
                         </Button>
-                        <Button type='primary' onClick={openPuml} style={{
+                        {/*<Button type='primary' onClick={openPuml} style={{
                             width: '95%'
                         }}>
                             Open PlantUML
-                        </Button>
+                        </Button>*/}
 
                         <Divider/>
 
@@ -218,6 +220,12 @@ const Wrapper = observer(( { store }: any ) => {
                             width: '95%'
                         }}>
                             {(store.getAnimationStatus()) ? 'Disable edges animation' : 'Enable edges animation'}
+                        </Button>
+
+                        <Button type='primary' onClick={() => setShowInitModal(true)} style={{
+                            width: '95%'
+                        }}>
+                            Help
                         </Button>
                     </Flex>
                 </div>
@@ -228,12 +236,12 @@ const Wrapper = observer(( { store }: any ) => {
                 />
 
                 <Modal
-                    title='Комментарии'
+                    title='Help'
                     open={showInitModal}
                     onOk={() => setShowInitModal(false)}
                     onCancel={() => setShowInitModal(false)}
                 >
-                    <p>В левой части расположен редактор кода и кнопки: для применения изменений с текстового редактора в нодовый, и наоборот, соответственно. <br/>В правой: элементы управления для работы с файлами и базовая нода для D&D режима работы редактора.<br/>Для MVP ограничен набор нод до С4 (все С4 сущности выводятся из базовой) - просто редактируйте поля двойным кликом.</p>
+                    <p>В левой части расположен редактор кода и кнопки: для применения изменений с текстового редактора в нодовый, и наоборот, соответственно. <br/>В правой: элементы управления для работы с файлами и базовая нода для D&D режима работы редактора.<br/>Для MVP ограничен набор нод до С4 (все С4 сущности выводятся из базовой) - просто редактируйте поля двойным кликом по текстовым полям.</p>
                     <br/>
 
                     <p>EPs: На данный момент возможно несовпадение порядка элементов в PlantUML скриптах, которые формирует пользователь и генерирует сервис, поэтому изменения могут приводить к переопределению порядка команд.</p>

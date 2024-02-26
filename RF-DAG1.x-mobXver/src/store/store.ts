@@ -27,8 +27,6 @@ export class SchemeStore {
 
     @observable.shallow nodes: Node[];
     @observable.shallow edges: Edge[];
-    // @observable.deep nodes: Node[];
-    // @observable.deep edges: Edge[];
 
     @observable currHandleId: number;
     @observable handlers: CustomNodeConfig[];
@@ -99,6 +97,19 @@ export class SchemeStore {
             )
         ));
     }
+    @action
+    onEdgeLabelChange = (changes: string, id: string) => {
+        console.log(changes, id);
+        this.edges.map(edge => (
+            (edge.id === id) ? ({
+                ...edge,
+                label: changes,
+            }) : (
+                edge
+            )
+        ));
+        console.log(console.log(this.edges.filter(edge => edge.id === id)))
+    }
 
     @action
     onNodesChange = (changes: NodeChange[]) => {
@@ -110,13 +121,22 @@ export class SchemeStore {
     } 
     @action
     onConnect = (connection: Connection) => {
-        const newEdge: Edge = { ...connection, type: 'floating', label: 'put label here', animated: true, }
+        const newEdge: Edge = { 
+            ...connection, 
+            id: `e-${connection.source}-${connection.target}`, 
+            type: 'floating', 
+            label: 'Set me in Puml editor', 
+            data: { 
+                pumlType: 'Rel',
+            }, 
+            animated: true, 
+        }
         this.edges = addEdge(newEdge, this.edges);
     }
 
 
     @action
-    updateNodeData = (id: string, data: any) => {
+    updateNodeData = (id: string, data: any) => { // TODO: specify type for node data's
         this.nodes = this.nodes.map(node => {
             return (node.id === id) ? (
                     node = {
@@ -132,6 +152,22 @@ export class SchemeStore {
                 );
         });
     }
+    @action
+    updateEdgeData = (id: string, data: any) => { // TODO: specify type for edge data's
+        this.edges = this.edges.map(edge => {
+            return (edge.id === id) ? (
+                    edge = {
+                        ...edge, 
+                        data: {
+                            ...edge.data,
+                            ...data,
+                        }
+                    }
+                ) : (
+                    edge
+                );
+        });
+    };
 
     
     getNode = (nodeId: string) => {
@@ -199,19 +235,21 @@ export class SchemeStore {
                 edges: layoutedEdges } = layouter.getLayoutedElements(jsonScheme.schemeData.nodes, 
                                                                       jsonScheme.schemeData.edges);
 
-        // TODO: singleton mapper for sizes?
-        // const sizes = layouter.getSize('node');
         
+        const existedNodeIds = new Map();
         const sizes = document.querySelector('.C4BaseNode')
         layoutedNodes.map((node: Node) => {
-            // node.width  = sizes.width;
-            // node.height = sizes.height; 
             node.width  = sizes.offsetWidth;
             node.height = sizes.offsetHeight; 
+            existedNodeIds.set(node.id, 1);
         });
 
+
         this.nodes = structuredClone(layoutedNodes);
-        this.edges = structuredClone(layoutedEdges);
+
+        // filtering til exist ignoring of boundaries
+        this.edges = structuredClone(layoutedEdges.filter(edge => existedNodeIds.get(edge.source) && existedNodeIds.get(edge.target)));
+        // this.edges = structuredClone(layoutedEdges);
     }
     getAdapterOutput = () => {
         return {
