@@ -92,8 +92,8 @@ class DataExchanger {
 
     		if (tokenHandler === 'Person' || 
     			tokenHandler === 'System') {
-    			str += `\n${tab}/' Pos ${i.position.x} ${i.position.y} '/\n`;
-    			str += `${tab}${i.data.pumlType}(${i.id}, \"${i.data.mainLabel}\"`;
+    			// str += `\n${tab}/' Pos ${i.position.x} ${i.position.y} '/\n`;
+    			str += `\n${tab}${i.data.pumlType}(${i.id}, \"${i.data.mainLabel}\"`;
 	    		str += (i.data.description) ? `, \"${i.data.description}\"`    : '';
 	    		str += (i.data.sprite)      ? `, $sprite=\"${i.data.sprite}\"` : '';
 	    		str += (i.data.tags)        ? `, $tags=\"${i.data.tags}\"`     : '';
@@ -102,8 +102,8 @@ class DataExchanger {
 	    		str += (i.data.baseShape)   ? `, ${i.data.baseShape}`          : '';
 	    		str += ')';
     		} else if (tokenHandler === 'Boundary') {
-    			str += `\n/' Pos ${i.position.x} ${i.position.y} '/\n`;
-    			str += `${i.data.pumlType}(${i.id}, \"${i.data.label}\"`;
+    			// str += `\n/' Pos ${i.position.x} ${i.position.y} '/\n`;
+    			str += `\n${i.data.pumlType}(${i.id}, \"${i.data.label}\"`;
 	    		str += (i.data.type) ? `, $type=\"${i.data.type}\"` : '';
 	    		str += (i.data.tags) ? `, $tags=\"${i.data.tags}\"` : '';
 	    		str += (i.data.link) ? `, $link=\"${i.data.link}\"` : '';
@@ -111,7 +111,6 @@ class DataExchanger {
 
 	    		currParent = i.id; inBlock = true; tab = '\t';
     		} else if (tokenHandler === 'Rel') {
-
     			str += `\n${tab}${i.data.pumlType}(${i.source}, ${i.target}, \"${i.label}\"`;
     			str += (i.data.techn)  ? `, \"${i.data.techn}\"`          : '';
     			str += (i.data.descr)  ? `, \"${i.data.descr}\"`          : '';

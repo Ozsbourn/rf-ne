@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useState } from "react";
 // For debug; Should be base staff for example or quick start later tho
 import contextExample          from "../initialData/context";
 
@@ -10,6 +10,10 @@ import { reqConfig }   from "../configs/requestsConfig";
 import plantumlEncoder from 'plantuml-encoder';
 
 import rfBuilder, { BuilderResponse } from "../libs/rfBuilder";
+import dataExchanger from "../libs/dataExchanger";
+
+import { Button, Flex } from "antd";
+import nodeFormatter from "../libs/nodeFormatter";
 
 
 
@@ -56,9 +60,9 @@ const parseMetaInfo = (pumlScheme: string) => {
 
 const adaptResponsedDataToRFScheme = (responsedData: any) => {
     let scheme: any = { meta: {}, schemeData: { nodes: [], edges: [], groups: [], }};
-    
     for (let element of responsedData.elements) {
         const newElement: BuilderResponse = rfBuilder.getRfObject(element);
+    
 
         if (newElement.type === 'Node') {
             scheme = {
@@ -113,6 +117,7 @@ const adaptResponsedDataToRFScheme = (responsedData: any) => {
             continue;
         }
     }
+    nodeFormatter.endFormatting();
 
     return scheme;
 };
@@ -120,15 +125,17 @@ const adaptResponsedDataToRFScheme = (responsedData: any) => {
 
 // For external plantuml
 const Adapter = () => {
-    const { setAdapterOutput } = useStore();
+    const { getAdapterOutput, setAdapterOutput, getPumlScript } = useStore();
     const [code, setCode] = useState(contextExample);
 
-    useEffect(() => {}, []);
+    const updateCodeInEditor = () => {
+        const tmp = JSON.stringify(getAdapterOutput(), null, 2); 
+        setCode(dataExchanger.toPuml(tmp))
+    };
 
     const sendToServer = () => {
         const encoded = plantumlEncoder.encode(code);
 
-        // Full way for test
         axios.post(reqConfig.serverUrl, {
             pumlEncoded: encoded
         })
@@ -141,7 +148,6 @@ const Adapter = () => {
             setAdapterOutput(rfScheme);
         })
         .catch(function (err) {
-            // Debug
             console.log(err);
         });
     };
@@ -149,12 +155,14 @@ const Adapter = () => {
 
 
     return (
-        <>
+        <div style={{
+            height: '100%',
+        }}>
             <CodeMirror
                 style={{
-                    width:     '550px',
-                    minHeight: '100%',
-                    maxHeight: '100%',
+                    width:     '400px',
+                    minHeight: '85%',
+                    maxHeight: '89%',
                     overflow:  'auto',
                     overflowY: 'scroll',
                 }}
@@ -177,16 +185,31 @@ const Adapter = () => {
                     ]
                 }
             />
-            <input 
-                type='button' 
-                onClick={sendToServer} 
-                value='Apply to editor' 
-                style={{
-                    width: '100px', 
-                    height: '25px'
-                }} />
-        </>
+
+            <Flex vertical={true} gap={5}>
+                <Button
+                    type="primary"
+                    onClick={sendToServer}
+                    style={{
+                        width: '100%', 
+                        height: '35px'
+                    }}
+                >
+                    Apply to Scheme
+                </Button>
+                <Button
+                    type="primary"
+                    onClick={updateCodeInEditor}
+                    style={{ 
+                        width: '100%', 
+                        height: '35px'
+                    }}
+                >
+                    Apply to Editor
+                </Button>
+            </Flex>
+        </div>
     )
 }
 
-export default Adapter;
+export default memo(Adapter);

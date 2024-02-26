@@ -12,8 +12,9 @@ import {
 } from 'reactflow';
 
 import { HandleConfig, CustomNodeConfig } from '../nodeConfig';
-import initialNodes  from '../initialData/nodes';
-import initialEdges  from '../initialData/edges';
+import initialNodes   from '../initialData/nodes';
+import initialEdges   from '../initialData/edges';
+import contextExample from '../initialData/context';
 
 
 
@@ -36,6 +37,8 @@ type RFState = {
     onNodeLabelChange: (changes: string, id: string) => void;
     deleteNode:        (id: string)                  => void;
     onEdgesChange:     (changes: EdgeChange[])       => void;
+
+    updateNodeData:    (id: string, data: any) => void;
     
     onConnect:         (connection: Connection)      => void;
     appendNode:        (node: Node)                  => void;
@@ -46,13 +49,13 @@ type RFState = {
    
     appendHandlers:    (handleConfig: CustomNodeConfig) => void;
 
-    getJsonScheme:     () => string;
-    setJsonScheme:     (scheme: string) => void;
-
-    // for test parsing only 
     jsonAdapterScheme: string; 
     setAdapterOutput:  (jsonScheme: any) => void;
     getAdapterOutput:  () => string;
+
+    pumlScript: string;
+    setPumlScript: (script: string) => void;
+    getPumlScript: () => string;
 };
 
 
@@ -123,6 +126,14 @@ const useStore = create<RFState>((set: any, get: any) => ({
             });
         },
 
+        updateNodeData: (id: string, data: any) => {
+            for (let i of get().nodes) {
+                if (i.id === id) {
+                    i.data = data;
+                }
+            }
+        }, 
+
         onConnect: (connection: Connection) => {
             const newEdge: any = { ...connection, type: 'defaultEdge', label: 'Put ur label here', markerEnd: { type: MarkerType.ArrowClosed } };
             set({
@@ -166,32 +177,10 @@ const useStore = create<RFState>((set: any, get: any) => ({
             });
         },
 
-        getJsonScheme: () => {
-            const nodes = get().nodes;
-            const edges = get().edges;
-            const handlers = get().handlers;
-
-            const json = {
-                nodes, 
-                edges, 
-                handlers
-            }
-
-            return JSON.stringify(json, null, 2);
-        },
-        
-        setJsonScheme: (scheme: string) => {
-            const obj = JSON.parse(scheme);
-
-            set({
-                nodes: obj.nodes,
-                edges: obj.edges,
-                handlers: obj.handlers,
-            });
-        },
 
         jsonAdapterScheme: '',
         setAdapterOutput:  (jsonScheme: any) => {
+            console.log(jsonScheme)
             set({
                 jsonAdapterScheme:  jsonScheme,
                 
@@ -199,13 +188,20 @@ const useStore = create<RFState>((set: any, get: any) => ({
 
                 nodes:              jsonScheme.schemeData.nodes,
                 edges:              jsonScheme.schemeData.edges,
-
-                /* Here should be groups also */
             });
         },
-
         getAdapterOutput:  () => {
             return get().jsonAdapterScheme;
+        },
+
+        pumlScript: contextExample,
+        setPumlScript: (script: string) => {
+            set({
+                pumlScript: script,
+            });
+        },
+        getPumlScript: () => {
+            return get().pumlScript;
         },
     })
 );

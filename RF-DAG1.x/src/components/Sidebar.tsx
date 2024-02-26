@@ -1,4 +1,8 @@
 import React from 'react';
+import { 
+    Button, 
+    // Flex 
+} from 'antd';
 
 
 
@@ -32,12 +36,11 @@ export default () => {
                     Custom node
                 </div>    */}
 
-                <div className='dndnode output' onDragStart={(event) => onDragStart(event, 'C4Node')} draggable>
-                    C4 node
-                </div>        
-            </div>
-
-            <div className='nodeEditFields'>
+                <Button type='primary' onDragStart={(event) => onDragStart(event, 'C4Node')} draggable style={{
+                    width: '95%'
+                }}>
+                    C4 Node     
+                </Button>        
             </div>
         </aside>
     );

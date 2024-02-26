@@ -15,16 +15,22 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import useStore  from './store/store';
+import useStore     from './store/store';
+import { useEditStore } from  './store/editComponentsStore';
 
 import Sidebar       from './components/Sidebar';
+import { 
+    Button, 
+    Flex,
+    Modal, 
+} from 'antd';
 import { nodeTypes } from './initialData/nodeTypes';
 import { edgeTypes } from './initialData/egdeTypes'; 
 import { CustomNodeConfig }        from './nodeConfig';
 import { createNodeConfigPattern } from './store/nodeConfigFactory';
+
 import CodeEditor from './components/CodeEditor';
-// for test here now
-import Adapter from './pages/adapter';
+import Adapter    from './pages/adapter';
 
 
 
@@ -42,7 +48,13 @@ function App() {
             getNewHandleId,
             deleteNode,
     } = useStore();
+    const {
+        getEditingNode,
+        clearEditingNode,
+    } = useEditStore();
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [isModalOpen, setIsModalOpen]             = useState(false);
+
 
     const onDragOver = useCallback((event: { preventDefault: () => void; dataTransfer: { dropEffect: string; }; }) => {
         event.preventDefault();
@@ -90,7 +102,7 @@ function App() {
         a.href = URL.createObjectURL(new Blob([JSON.stringify(rfJsonInstance, null, 2)], {
             type: 'text/plain'
         }));
-        a.setAttribute('download', 'data.json');
+        a.setAttribute('download', 'scheme.json');
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -101,16 +113,38 @@ function App() {
     }
 
     const onDeleteNodeList = (nodes: Node[]) => {
-        nodes.map((node) => {
+        nodes.map((node: Node) => {
             deleteNode(node.id);
         });
     }
+
+    const showModal = () => {
+        if (getEditingNode() !== '') {
+            setIsModalOpen(true);
+        }
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+        clearEditingNode();
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        clearEditingNode();
+    };
+
+    useEffect(() => {
+        const unsub = useEditStore.subscribe(showModal);
+
+        return unsub;
+    }, []);
     useEffect(() => {}, [reactFlowInstance]);
 
 
 
     return (
-        <div className='dndflow'>
+        <div className='dndflow' style={{
+            height: '100%'
+        }}>
             <ReactFlowProvider>
                 <div>
                     <Adapter />
@@ -147,22 +181,40 @@ function App() {
                         <Controls />
                         <MiniMap 
                             style={{border: "1px solid #000000"}}
-                            nodeColor={'#cd0ffe'}
+                            nodeColor={'#4071ff'}
+
                             pannable 
                             zoomable
                         />
                     </ReactFlow>
                 </div>
-                <div className='controls-panel'>
+                <div className='controls-panel' style={{
+                    height: '100%'
+                }}>
                     <Sidebar />
 
-                    <div className='dndnode input save-button' onClick={saveToJSON}>
-                        Save to JSON
-                    </div>
-                    <div className='dndnode input save-button' onClick={openJSON}>
-                        Open JSON
-                    </div>
+                    
+                    <Flex align='center' vertical={true} style={{
+                        width: '100%',
+                        height: '85%',
+                        gap: 5
+                    }}>
+                        <Button type='primary' onClick={saveToJSON} style={{
+                            width: '95%'
+                        }}>
+                            Save to JSON
+                        </Button>
+                        <Button type='primary' onClick={openJSON} style={{
+                            width: '95%'
+                        }}>
+                            Open JSON
+                        </Button>
+                    </Flex>
                 </div>
+
+                <Modal title='Edit component' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    
+                </Modal>
             </ReactFlowProvider>
         </div>
     );

@@ -1,7 +1,9 @@
-import { useState }  from 'react';
-import { Handle, NodeProps, NodeResizer, Position } from 'reactflow';
+import { useEffect, useState }  from 'react';
+import { Handle, NodeProps, NodeResizer, NodeToolbar, Position } from 'reactflow';
 import Label         from '../../../Label';
-// import useStore from '../../../../store/store';
+
+import { useEditStore } from  '../../../../store/editComponentsStore';
+import useStore from '../../../../store/store';
 
 
 type C4NodeInfo = {
@@ -35,16 +37,19 @@ type C4NodeInfo = {
 const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
     const [mainLabel,   setMainLabel]   = useState(nodeProps.data.mainLabel);
     const [description, setDescription] = useState(nodeProps.data.description);
-    const [sprite,      setSprite]      = useState(nodeProps.data.sprite);        // unused rn
-    const [tags,        setTags]        = useState(nodeProps.data.tags);          // unused rn
-    const [link,        setLink]        = useState(nodeProps.data.link);          // unused rn
+    const [sprite,      setSprite]      = useState(nodeProps.data.sprite);        
+    const [tags,        setTags]        = useState(nodeProps.data.tags);          
+    const [link,        setLink]        = useState(nodeProps.data.link);          
     const [nodeType,    setNodeType]    = useState(nodeProps.data.nodeType);
-    const [baseShape,   setBaseShape]   = useState(nodeProps.data.baseShape);     // unused rn
+    const [baseShape,   setBaseShape]   = useState(nodeProps.data.baseShape);     
 
     
     const [isMLShowInput, setIsMLShowInput] = useState(false);    // ML - main label
     const [isNTShowInput, setIsNTShowInput] = useState(false);    // NT - node type
     const [isDShowInput,  setIsDShowInput]  = useState(false);    //  D - description
+
+    const { deleteNode, updateNodeData }     = useStore();
+    const { setEditingNode } = useEditStore();
 
 
     const changeMLabel = (e: { target: { value: string; }; }) => {
@@ -60,6 +65,25 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
         // onNodeLabelChange(e.target.value, id);
     }
 
+    const handleCopy = () => {};
+    const handleEdit = () => { setEditingNode(nodeProps.id); };
+    const handleDelete = () => {
+        deleteNode(nodeProps.id);
+    };
+
+    useEffect(() => {
+        updateNodeData(nodeProps.id, { 
+            ...nodeProps.data,
+            mainLabel:   mainLabel,
+            description: description,
+            sprite:      (sprite)    ? sprite    : undefined, 
+            tags:        (tags)      ? tags      : undefined, 
+            link:        (link)      ? link      : undefined, 
+            nodeType:    (nodeType)  ? nodeType  : undefined, 
+            baseShape:   (baseShape) ? baseShape : undefined, 
+        })
+    }, [mainLabel, description, sprite, tags, link, nodeType, baseShape]);
+
 
 
     return (
@@ -70,6 +94,16 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
                 minWidth={250} 
                 minHeight={150}
             />
+
+            <NodeToolbar 
+                className='controlsNodePanel' 
+                isVisible={nodeProps.toolbarVisible}
+                position={nodeProps.toolbarPosition}
+            >
+                <button onClick={handleCopy}>Copy</button>
+                <button onClick={handleEdit}>Edit</button>
+                <button onClick={handleDelete}>Delete</button>
+            </NodeToolbar>
 
             <Label
                 className='c4-mainLabel'
@@ -107,7 +141,7 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             {/* For test only - straight way */}
             <Handle 
                 id={'1'}
-                type='source'
+                type='target'
                 position={Position.Left}
             />
             <Handle 
@@ -118,12 +152,12 @@ const C4BaseNode = (nodeProps: NodeProps<C4NodeInfo>) => {
             <Handle 
                 id={'3'}
                 type='source' 
-                position={Position.Right}
+                position={Position.Bottom}
             />
             <Handle 
                 id={'4'}
                 type='source' 
-                position={Position.Bottom}
+                position={Position.Right}
             />
             {/* For test only - straight way */}
         </div>

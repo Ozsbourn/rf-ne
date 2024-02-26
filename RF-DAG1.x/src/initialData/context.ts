@@ -1,5 +1,7 @@
-const contextExample: string = `
-@startuml
+
+
+
+const contextExample: string = `@startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
 LAYOUT_WITH_LEGEND()

@@ -1,3 +1,5 @@
+import { XYPosition } from "reactflow";
+import nodeFormatter from "./nodeFormatter";
 
 
 
@@ -8,7 +10,7 @@ export type BuilderErrors = {
 };
 
 export type BuilderResponse = {
-    type:   'Edge' | 'Node' | 'Boundary' | 'InvalidPlantUMLObject' | undefined;
+    type:   'Edge' | 'Node' | 'Boundary' | 'Comment' | 'InvalidPlantUMLObject' | undefined;
     object: any;
 };
 
@@ -25,6 +27,10 @@ class RFObjectsBuilder {
     };
 
     getRfObject = (object: any, parent: any = null) => {
+        if (object.comment) {
+            return this.response = { type: 'Comment', object: this._createInvalid(object)}
+        }
+
         switch (object.type_.name) {
             /* Return C4BaseNode */
             case 'Person': 
@@ -68,13 +74,12 @@ class RFObjectsBuilder {
     };    
 
     _createNode = (object: any, parent: any = null) => {
+        const pos: XYPosition = nodeFormatter.getNewPosition();
+
         return {
             id: object.alias,
             type: 'C4Node',
-            position: {
-                x: 0,
-                y: 0,
-            },
+            position: pos,
             data: {
                 mainLabel:   object.label,
                 description: object.descr,
@@ -86,14 +91,19 @@ class RFObjectsBuilder {
 
                 pumlType:    object.type_.name,
             },
+
             parentNode: parent,
+            extent:     (parent) ? 'parent' : undefined,
         };
     };
 
     _createEdge = (object: any, parent: any = null) => {
         return {
             id:     'e_' + object.from + '-' + object.to,
-            type:   'defaultEdge',
+            // type:   'defaultEdge',
+            // type:   'smart',
+            // type:   'default',
+            type:   'smoothstep',
             
             source: object.from,
             target: object.to,
@@ -108,6 +118,8 @@ class RFObjectsBuilder {
     };
 
     _createBoundary = (object: any, parent: any = null) => {
+        const pos: XYPosition = nodeFormatter.getNewPosition();
+
         let nodeIds = [];
         for (let i of object.elements) {
             nodeIds.push(i.alias);
@@ -116,10 +128,8 @@ class RFObjectsBuilder {
         return {
             id:   object.alias,
             type: 'C4Boundary',
-            position: {
-                x: 0,
-                y: 0,
-            },
+            // type: 'group',
+            position: pos,
             data: {
                 label:    object.label,
                 elements: nodeIds,

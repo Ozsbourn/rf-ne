@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { NodeResizer } from "reactflow";
 
 
 
@@ -34,13 +35,19 @@ const C4Boundary = (nodeProps: any) => {
     return (
         <div 
             className='boundaryBase'
-            style={{
-                backgroundColor: 'rgba(120, 120, 120, 0.2)', 
-                width: 400, 
-                height: 200,
-            }}
         >
-            <p style={{ textAlign: 'center' }}>{mainLabel}</p>
+            <NodeResizer 
+                color='#ff0071' 
+                isVisible={nodeProps.selected} 
+                minWidth={250} 
+                minHeight={150}
+            />
+
+            <p style={{ 
+                textAlign: 'center' 
+            }}>
+                {mainLabel}
+            </p>
         </div>
     );
 };

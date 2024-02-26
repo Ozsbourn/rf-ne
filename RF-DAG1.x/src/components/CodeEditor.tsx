@@ -1,45 +1,38 @@
 import { 
     useState,
-    useEffect } from 'react';
-import CodeMirror, { basicSetup } from '@uiw/react-codemirror';
+    useEffect, 
+    memo} from 'react';
+// import CodeMirror, { basicSetup } from '@uiw/react-codemirror';
 import useStore from '../store/store';
-import { json } from '@codemirror/lang-json';
 
 // test rn
-import dataExchanger from '../libs/dataExchanger';
+// import dataExchanger from '../libs/dataExchanger';
 
 
 
 // For internal json
 const CodeEditor = () => {
-    const { 
-        // getJsonScheme, 
-        // setJsonScheme, 
-        getAdapterOutput } = useStore();
-    const [code, setCode]   = useState('{}');
+    // const { getAdapterOutput, setPumlScript } = useStore();
+    // const [code, setCode]   = useState('{}');
     
-    const updateCodeInEditor = () => {
-        // setCode(getJsonScheme());
-        const tmp = JSON.stringify(getAdapterOutput(), null, 2); 
-        setCode(tmp);
-        console.log(dataExchanger.toPuml(tmp));
-    };
-    const updateCodeInStore = () => {
-        // setJsonScheme(code)
-    };
+    // const updateCodeInEditor = () => {
+    //     const tmp = JSON.stringify(getAdapterOutput(), null, 2); 
+    //     setCode(tmp);
 
+    //     console.log(dataExchanger.toPuml(tmp));
+    // };
 
 
     useEffect(() => {
-        const unsub = useStore.subscribe(updateCodeInEditor);
+        // const unsub = useStore.subscribe(updateCodeInEditor);
 
-        return unsub;
+        // return unsub;
     }, []);
 
 
     return (
         <>
-            <CodeMirror
+            {/*<CodeMirror
                 style={{
                     width: '350px',
                     minHeight: '100%',
@@ -75,9 +68,9 @@ const CodeEditor = () => {
                     width: '100px', 
                     height: '25px'
                 }} 
-            />
+            />*/}
         </>
     );
 };
 
-export default CodeEditor;
+export default memo(CodeEditor);
