@@ -85,8 +85,8 @@ class DataExchanger {
             }
         }
 
-        meta += '\n';
-        meta += (metaObj.legend) ? metaObj.legend + '\n\n'  : '';
+        // meta += '\n';
+        meta += (metaObj.legend) ? ('\n' + metaObj.legend) + '\n\n'  : '';
         meta += (metaObj.title)  ? `title ${metaObj.title}` : '';
     
         return meta;

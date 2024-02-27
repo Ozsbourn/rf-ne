@@ -53,7 +53,7 @@ const FloatingEdge: FC<EdgeProps> = ({ id, source, target, markerEnd, style, lab
                         fontSize: 11,
                         fontWeight: 500,
 
-                        // pointerEvents: 'all', // allow make an editable svg element
+                        pointerEvents: 'all', // allow make an editable svg element
 
                         textAlign: 'center',
                     }}

@@ -99,8 +99,7 @@ export class SchemeStore {
     }
     @action
     onEdgeLabelChange = (changes: string, id: string) => {
-        console.log(changes, id);
-        this.edges.map(edge => (
+        this.edges = this.edges.map(edge => (
             (edge.id === id) ? ({
                 ...edge,
                 label: changes,
@@ -108,7 +107,6 @@ export class SchemeStore {
                 edge
             )
         ));
-        console.log(console.log(this.edges.filter(edge => edge.id === id)))
     }
 
     @action
@@ -152,7 +150,7 @@ export class SchemeStore {
                 );
         });
     }
-    @action
+    @action /* Unused now, should use later after using data field in edges */
     updateEdgeData = (id: string, data: any) => { // TODO: specify type for edge data's
         this.edges = this.edges.map(edge => {
             return (edge.id === id) ? (
