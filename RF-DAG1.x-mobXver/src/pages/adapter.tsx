@@ -202,7 +202,7 @@ const Adapter = () => {
                         height: '35px'
                     }}
                 >
-                    Apply to Scheme
+                    Apply to Visual Editor
                 </Button>
                 <Button
                     type="primary"
@@ -212,7 +212,7 @@ const Adapter = () => {
                         height: '35px'
                     }}
                 >
-                    Apply to Editor
+                    Apply to Code Editor
                 </Button>
             </Flex>
         </div>
